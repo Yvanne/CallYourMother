@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">REMINDER FREQUENCY</string>
+    <string name="title">EDIT FREQUENCY</string>
+    <string name="radiobutton1">Daily</string>
+    <string name="radiobutton2">Weekly</string>
+    <string name="radiobutton3">Monthly</string>
+    <string name="radiobutton4">Yearly</string>
+    <string name="num"></string>
+    <string name="contact">contact name...</string>
+    <string name="number">times</string>
+    <string name="call">Calls</string>
+    <string name="text">Texts</string>
+    <string name="save">SAVE</string>
+</resources>
