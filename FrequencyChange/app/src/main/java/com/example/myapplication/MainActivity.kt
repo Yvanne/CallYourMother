@@ -49,10 +49,6 @@ class MainActivity : AppCompatActivity() {
             reminderType = "call"
         else if(textChecked.isChecked)
             reminderType = "text"
-        //Toast.makeText(applicationContext, reminderType+" reminder types selected", Toast.LENGTH_SHORT).show()
-
-
-        // Get how many times the user wants to be reminded
 
 
         // Saving user configurations
@@ -62,11 +58,13 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, reminderType+" reminders set "+ numTimes.text.toString()+" times "+str, Toast.LENGTH_LONG).show()
 
 
-            //  - return data Intent to main and maybe notification and finish
-            /*var dataIntent: Intent = Intent()
-            ToDoItem.packageIntent(dataIntent, title, getPriority, getStatus, getDate)
-            setResult(RESULT_OK, dataIntent)
-            finish()*/
+            // TODO - return data Intent to main activity where this will also be sent to notification data
+
+            var dataIntent: Intent = Intent(this, SecondActivity.class)
+            dataIntent.putExtra("reminder type", reminderType)
+            dataIntent.putExtra("number of times", numTimes.toString())
+            dataIntent.putExtra("frequency type", str)
+            startActivity(dataIntent)
 
         }
 
