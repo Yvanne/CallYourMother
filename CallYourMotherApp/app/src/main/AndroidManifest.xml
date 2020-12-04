@@ -20,6 +20,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".Receiver">
+            <intent-filter>
+                <action android:name="yes" />
+                <action android:name="no" />
+                <action android:name="call now" />
+            </intent-filter>
+        </receiver>
+
+<!--        <activity-->
+<!--            android:name=".SecondFragment"-->
+<!--            android:label="@string/app_name"-->
+<!--            android:theme="@style/AppTheme.NoActionBar">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
+
+
+
 
 </manifest>
