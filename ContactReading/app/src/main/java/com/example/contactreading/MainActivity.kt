@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 var rs = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                cols, "$(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME) LIKE ?",
+                cols, "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ?",
                     Array(1){"%$p0%"}, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
                 adapter.changeCursor(rs)
                 return false
