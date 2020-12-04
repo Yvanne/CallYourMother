@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
 
             // TODO - return data Intent to main activity where this will also be sent to notification data
 
-            var dataIntent: Intent = Intent(this, SecondActivity.class)
+         /*   var dataIntent: Intent = Intent(this, SecondActivity.class)
             dataIntent.putExtra("reminder type", reminderType)
             dataIntent.putExtra("number of times", numTimes.toString())
             dataIntent.putExtra("frequency type", str)
-            startActivity(dataIntent)
+            startActivity(dataIntent) */
 
         }
 
