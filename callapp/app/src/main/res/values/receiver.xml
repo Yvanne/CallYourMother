@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <receiver name="NotificationActionReceiver">-->
+<!--        <intent-filter>-->
+<!--            <action name="CONFIRM" />-->
+<!--            <action name="CANCEL" />-->
+<!--        </intent-filter>-->
+<!--    </receiver>-->
+
+</resources>
