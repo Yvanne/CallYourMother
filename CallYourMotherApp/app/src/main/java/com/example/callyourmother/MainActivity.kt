@@ -1,6 +1,7 @@
 package com.example.callyourmother
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,14 +43,11 @@ class MainActivity : AppCompatActivity() {
 
     private val CHANNEL_ID = "channel_id"
     public var notificationId = 101
-    private val time = 0 //in milliseconds
-    private val mNotificationTime = Calendar.getInstance().timeInMillis + time
+    val delay : Long = 1000 //in milliseconds
+//    private val mNotificationTime = Calendar.getInstance().timeInMillis + time
 
 
-    private val i: Intent = intent //getIntent()
-    val type= i.getStringExtra("reminder type")//text/call
-    val times = i.getStringExtra("number of times")
-    val freq= i.getStringExtra("frequency type")//day/week/month/year
+
 
 
 //    var yourBR: Receiver? = null
@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+//        val delay = 3000
+//        alarmHandle(delay)
+
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -71,13 +74,17 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
 
         button2.setOnClickListener {
-            sendNotification()
+            sendNotification(delay)
+//            NotificationUtils().setNotification(delay.toLong(), this@MainActivity)
         }
         button.setOnClickListener {
             val intent = Intent(this, Edit::class.java)
             startActivity(intent)
 
-
+            val i: Intent = intent //getIntent()
+            val type= i.getStringExtra("reminder type")//text/call
+            val times = i.getStringExtra("number of times")
+            val freq= i.getStringExtra("frequency type")//day/week/month/year
         }
 
         //ask for permission multiple times
@@ -216,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 //            val element = adapter.getView(position,view,parent)// The item that was clicked
 //                val intent = Intent(this, BookDetailActivity::class.java)
 //                startActivity(intent)
-            val element = adapter.getItem(position)
+            val element = adapter.getItem(position).hashCode()
             Log.i("tag", "onclickcontactyay")
 
             Toast.makeText(this, "The best player is $element", Toast.LENGTH_SHORT).show()//
@@ -280,55 +287,93 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotification(){
+    fun alarmHandle(delay : Int){
+        val myIntent = Intent(this@MainActivity, Receiver::class.java)
+        val pendingIntent = PendingIntent.getService(this@MainActivity, 0, myIntent, 0)
+
+        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
+
+    }
+
+    fun sendNotification(del: Long) {
+//        val myIntent = Intent(this@MainActivity, Receiver::class.java)
+//        val alarmpendingIntent = PendingIntent.getService(this@MainActivity, 0, myIntent, 0)
+
+//        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, alarmpendingIntent)
 
         val landingIntent = Intent(this, Receiver::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
         val pendingIntent = PendingIntent.getActivity(this, 0, landingIntent, 0)
+
+
+        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
+
 
         val callnowIntent = Intent(this, Receiver::class.java).apply {
             identifier = "now"
 //            action = Intent.ACTION_CALL
         }
 //        callnowIntent.identifier = "now"
-        val callnowPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, callnowIntent, 0)
+        val callnowPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, callnowIntent, 0)
 
         val snoozeIntent = Intent(this, Receiver::class.java).apply {
             identifier = "later"
         }
-        val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, snoozeIntent, 0)
+        val snoozePendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, snoozeIntent, 0)
 
         val tomorrowIntent = Intent(this, Receiver::class.java).apply {
             identifier = "tomorrow"
         }
-        val tomorrowPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, tomorrowIntent, 0)
+        val tomorrowPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, tomorrowIntent, 0)
 
 //
 //        val drawable: Drawable = ContextCompat.getDrawable(this, R.drawable.your_drawable)
 //        val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
 //
-        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification_icon)
-            .setContentTitle("AHHHHHHHHHHHHHHHHHHHHHH")
-            .setContentText("help me :(")
+//        Timer().schedule(2000.toLong()){
+        Handler().postDelayed({
+            val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setContentTitle("AHHHHHHHHHHHHHHHHHHHHHH")
+                .setContentText("help me :(")
+                .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
 //            .setAutoCancel(true)
 //            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "Call Now", callnowPendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "Snooze for 2 hours", snoozePendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "Call Tomorrow", tomorrowPendingIntent)
-            .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.ic_launcher_foreground, "Call Now", callnowPendingIntent)
+                .addAction(
+                    R.drawable.ic_launcher_foreground,
+                    "Snooze for 2 hours",
+                    snoozePendingIntent
+                )
+                .addAction(
+                    R.drawable.ic_launcher_foreground,
+                    "Call Tomorrow",
+                    tomorrowPendingIntent
+                )
+                .setAutoCancel(true)
 
 
-        with(NotificationManagerCompat.from(this)) {
-            notify(notificationId, notificationBuilder.build())
-        }
+//        Timer().schedule(2000){
+//
+//        }
 
+            with(NotificationManagerCompat.from(this)) {
+                notify(notificationId, notificationBuilder.build())
+            }
+
+
+//    Handler().postDelayed({
+//        //doSomethingHere()
+        }, del)
     }
-
-
 
 
 }

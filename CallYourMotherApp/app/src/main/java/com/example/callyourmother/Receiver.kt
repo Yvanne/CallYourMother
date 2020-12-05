@@ -4,11 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import java.util.*
 
 
@@ -29,6 +26,12 @@ var yourMain: MainActivity? = null
 
 
     override fun onReceive(context: Context, intent: Intent) {
+
+//        val broadcastObserver = BroadcastObserver()
+//        broadcastObserver.triggerObservers()
+
+//        val service = Intent(context, NotificationService::class.java) //
+//        context.startService(service)
 
 
 //            if (intent.action.equals("yes", ignoreCase = true)) {
@@ -110,11 +113,12 @@ var yourMain: MainActivity? = null
             Toast.makeText(context, "Reminder Snoozed", Toast.LENGTH_LONG).show()//
 
             time = (System.currentTimeMillis() + 7200000)
-//                intent.action = ACTION_CLOSE_SYSTEM_DIALOGS
-
-//                mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                MainActivity().setNotification(mNotificationTime, this@MainActivity)
-
+            val d : Long = 2000
+//            val callnowIntent = Intent(this, ).apply {
+//                identifier = "now"
+////            action = Intent.ACTION_CALL
+//            }
+//            sendNotification(d)
 
 
 
@@ -159,8 +163,10 @@ var yourMain: MainActivity? = null
 //        var isConnected = true
 //        broadcastResult(isConnected)
     }
-//
-//    protected abstract fun broadcastResult(connected: Boolean)
+
+
+
+   //    protected abstract fun broadcastResult(connected: Boolean)
 
 }
 

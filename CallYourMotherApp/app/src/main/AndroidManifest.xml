@@ -25,6 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Login"
+            android:exported="true">
+
+        </activity>
+
         <receiver android:name=".Receiver">
             <intent-filter>
                 <action android:name="yes" />
@@ -32,6 +39,9 @@
                 <action android:name="call now" />
             </intent-filter>
         </receiver>
+
+
+<!--        <service android:name=".MyAlarmService"/>-->
 
         <activity android:name=".Edit">
             <intent-filter>
