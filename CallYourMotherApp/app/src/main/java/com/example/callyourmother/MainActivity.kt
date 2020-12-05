@@ -44,10 +44,10 @@ class MainActivity : AppCompatActivity() {
     private val mNotificationTime = Calendar.getInstance().timeInMillis + time
 
 
-    private val i: Intent = intent //getIntent()
+  /* private val i: Intent = intent //getIntent()
     val type= i.getStringExtra("reminder type")//text/call
     val times = i.getStringExtra("number of times")
-    val freq= i.getStringExtra("frequency type")//day/week/month/year
+    val freq= i.getStringExtra("frequency type")//day/week/month/year*/
 
 
 //    var yourBR: Receiver? = null
