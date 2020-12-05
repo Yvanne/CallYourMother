@@ -16,6 +16,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
@@ -43,6 +44,12 @@ class MainActivity : AppCompatActivity() {
     private val mNotificationTime = Calendar.getInstance().timeInMillis + time
 
 
+    private val i: Intent = intent //getIntent()
+    val type= i.getStringExtra("reminder type")//text/call
+    val times = i.getStringExtra("number of times")
+    val freq= i.getStringExtra("frequency type")//day/week/month/year
+
+
 //    var yourBR: Receiver? = null
 //    yourBR = Receiver()
 //    yourBR.setMainActivityHandler(this)
@@ -54,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -64,6 +72,12 @@ class MainActivity : AppCompatActivity() {
 
         button2.setOnClickListener {
             sendNotification()
+        }
+        button.setOnClickListener {
+            val intent = Intent(this, Edit::class.java)
+            startActivity(intent)
+
+
         }
 
         //ask for permission multiple times
@@ -189,7 +203,7 @@ class MainActivity : AppCompatActivity() {
             cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
 
 
-//val adapter = ArrayAdapter(this, R.layout.book_list_item, R.id.book_title, array)
+//val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_2, 0)
         var adapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
         listView.adapter = adapter
@@ -199,9 +213,10 @@ class MainActivity : AppCompatActivity() {
 //                val element = adapter.getItemAtPosition(position) // The item that was clicked
 //            }
         listView.setOnItemClickListener { parent, view, position, id ->
-            val element = adapter.getItem(position)// The item that was clicked
+//            val element = adapter.getView(position,view,parent)// The item that was clicked
 //                val intent = Intent(this, BookDetailActivity::class.java)
 //                startActivity(intent)
+            val element = adapter.getItem(position)
             Log.i("tag", "onclickcontactyay")
 
             Toast.makeText(this, "The best player is $element", Toast.LENGTH_SHORT).show()//

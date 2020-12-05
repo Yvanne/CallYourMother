@@ -38,6 +38,7 @@ class Edit : AppCompatActivity() {
         callChecked = findViewById(R.id.CallcheckBox)
         textChecked = findViewById(R.id.textCheckBox)
 
+
         // TODO: get the contact's name from mainActivity
         // probably through an intent
 
@@ -60,11 +61,11 @@ class Edit : AppCompatActivity() {
 
             // TODO - return data Intent to main activity where this will also be sent to notification data
 
-            /*   var dataIntent: Intent = Intent(this, SecondActivity.class)
+               var dataIntent: Intent = Intent(this, MainActivity::class.java)
                dataIntent.putExtra("reminder type", reminderType)
                dataIntent.putExtra("number of times", numTimes.toString())
                dataIntent.putExtra("frequency type", str)
-               startActivity(dataIntent) */
+               startActivity(dataIntent)
 
         }
 

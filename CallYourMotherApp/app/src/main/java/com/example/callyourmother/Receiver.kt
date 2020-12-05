@@ -1,19 +1,16 @@
 package com.example.callyourmother
 
-import android.app.Activity
-import android.app.AlarmManager
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_CLOSE_SYSTEM_DIALOGS
+import android.content.IntentFilter
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import kotlinx.coroutines.flow.combineTransform
+import androidx.core.content.ContextCompat.startActivity
 import java.util.*
+
 
 //private val Context.ALARM_SERVICE: Context
 //    get() {}
@@ -23,8 +20,16 @@ class Receiver  : BroadcastReceiver() {
     private var time = 0.toLong()//in ms
     private val curtime = Calendar.getInstance().timeInMillis
 //    private  val curtime = System.currentTimeMillis()
+var yourMain: MainActivity? = null
+
+    fun setMainActivityHandler(main: MainActivity) {
+        yourMain = main
+    }
+
+
 
     override fun onReceive(context: Context, intent: Intent) {
+
 
 //            if (intent.action.equals("yes", ignoreCase = true)) {
 //
@@ -45,6 +50,56 @@ class Receiver  : BroadcastReceiver() {
             Log.i("tag","clicked call now");
             Toast.makeText(context, "calling", Toast.LENGTH_LONG).show()//
 
+
+
+//            val i = Intent(Intent.ACTION_CALL);
+////            intent = Intent(Intent.ACTION_CALL)
+//            i.data = Uri.parse("tel:4444444444")
+//            context.startActivity(i)
+//            context.sendBroadcast(intent)
+
+//            yourMain?.phonecall()
+//            val launchIntent: Intent = getPackageManager().getLaunchIntentForPackage("com.google.android.youtube")
+//            val launchIntent: Intent = context.packageManager.getLaunchIntentForPackage("com.google.android.youtube")
+//            val launchIntent = Intent(this, context.packageManager.getLaunchIntentForPackage("com.google.android.youtube"))
+//
+//            if (launchIntent != null) {
+//                startActivity(launchIntent)
+//            } else {
+//                Toast.makeText(
+//                    context,
+//                    "There is no package available in android",
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+//            val intent: Intent? = context.packageManager.getLaunchIntentForPackage("com.package.youtube")
+////                GetPackageManager().getLaunchIntentForPackage("com.example.rushiActivity")
+////            var intent = PackageManager.GetLaunchIntentForPackage("com.package.y");
+//            startActivity(intent);
+//            val callIntent: Intent = Uri.parse("tel:4444444").let { number ->
+//                Intent(Intent.ACTION_DIAL, number)
+//            }
+//
+//            if (ActivityCompat.checkSelfPermission(MainActivity(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+//
+//            } else {
+//                ActivityCompat.requestPermissions(MainActivity(), arrayOf(Manifest.permission.CALL_PHONE), 112)
+//            }
+
+//            val man = MainActivity()
+//            man.phonecall()
+//            if (ActivityCompat.checkSelfPermission(MainActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(MainActivity(), Array(1) { Manifest.permission.CALL_PHONE }, 112)///
+//            } else {
+//            //has perm
+//            phonecall()
+//            val intent = Intent(Intent.ACTION_CALL);
+//            intent.data = Uri.parse("tel:4444444444")
+//            startActivity(intent)
+////        }
+
+//            intent.data = Uri.parse("tel:$number")
+//            MainActivity().broadcastIntent(view = View.inflate())
 
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -101,8 +156,11 @@ class Receiver  : BroadcastReceiver() {
 //
 //            service.data = Uri.parse("custom://" + System.currentTimeMillis())
 //            context.startService(service)
-
+//        var isConnected = true
+//        broadcastResult(isConnected)
     }
+//
+//    protected abstract fun broadcastResult(connected: Boolean)
 
 }
 
