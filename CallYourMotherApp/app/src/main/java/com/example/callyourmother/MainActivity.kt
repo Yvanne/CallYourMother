@@ -4,29 +4,31 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ListView
 import android.widget.SearchView
-
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
+//yes
 class MainActivity : AppCompatActivity() {
     //test!!!!
     var cols = listOf<String>(
@@ -39,6 +41,13 @@ class MainActivity : AppCompatActivity() {
     public var notificationId = 101
     private val time = 0 //in milliseconds
     private val mNotificationTime = Calendar.getInstance().timeInMillis + time
+
+
+//    var yourBR: Receiver? = null
+//    yourBR = Receiver()
+//    yourBR.setMainActivityHandler(this)
+//    val callInterceptorIntentFilter = IntentFilter("android.intent.action.ANY_ACTION")
+//    registerReceiver(yourBR, callInterceptorIntentFilter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,30 +65,6 @@ class MainActivity : AppCompatActivity() {
         button2.setOnClickListener {
             sendNotification()
         }
-//            findViewById<ListView>(R.id.listView).setOnClickListener { parent, view, position, id ->
-//                // Get the selected item text from ListView
-//                val selectedItem = parent.getItemAtPosition(position) as String
-//                Log.i("tag", "gh")
-//                Toast.makeText(this, "The best player is $selectedItem", Toast.LENGTH_LONG).show()//
-//
-//            }
-//            val listView : ListView = findViewById(R.id.listView)
-
-//            listView.setOnItemClickListener { parent, view, position, id ->
-//                // Get the selected item text from ListView
-//                val selectedItem = parent.getItemAtPosition(position) as String
-//                Log.i("tag", "gh")
-//                Toast.makeText(this, "The best player is $selectedItem", Toast.LENGTH_LONG).show()//
-//
-//            }
-
-//            listView.setOnItemClickListener { parent, _, position, _ ->
-//                val selectedItem = parent.getItemAtPosition(position) as String
-////                Toast.makeText(this, "The best player is $selectedItem", Toast.LENGTH_LONG).show()//
-//                    Log.i("tsg","msg")
-//            }
-
-
 
         //ask for permission multiple times
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -87,6 +72,21 @@ class MainActivity : AppCompatActivity() {
         } else {
             readContact()
         }
+
+        /////////////////////
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
+        } else {
+            //has perm
+//           phonecall()
+        }
+//        var receiver = object : Receiver() {
+//            override fun broadcastResult(connected: Boolean) {
+//                if(isConnected){
+//                    phonecall()
+//                }
+//            }
+//        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -94,6 +94,86 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             readContact()
         }
+//        if(requestCode == 112 && grantResults[0] == PackageManager.PERMISSION_GRANTED){//call
+//            phonecall()
+//        }
+    }
+
+//    private val mPlugInReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context, intent: Intent) {
+//            if(intent.identifier == "now"){
+//                Log.i("tag","clicked call now");
+//                Toast.makeText(context, "calling", Toast.LENGTH_LONG).show()//
+//
+//            phonecall()
+////            val intent = Intent(Intent.ACTION_CALL);
+////            intent.data = Uri.parse("tel:4444444444")
+////            startActivity(intent)
+//
+//
+//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//                notificationManager.cancel(MainActivity().notificationId)
+//            }
+//            if(intent.identifier == "later"){
+//                Log.i("tag","clicked snooze");
+//                Toast.makeText(context, "Reminder Snoozed", Toast.LENGTH_LONG).show()//
+//
+//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//                notificationManager.cancel(MainActivity().notificationId)
+//            }
+//            if(intent.identifier == "tomorrow"){
+//                Log.i("tag","clicked tomorrow");
+//                Toast.makeText(context, "Snoozed for 24 hours.", Toast.LENGTH_LONG).show()//
+//
+//
+//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//                notificationManager.cancel(MainActivity().notificationId)
+//            }
+//        }
+//    }
+//    private fun getIntentFilter(): IntentFilter {
+//        val iFilter = IntentFilter()
+//        iFilter.addAction(Intent.ACTION_POWER_CONNECTED)
+//        iFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
+//        return iFilter
+//    }
+////    private val mPlugInReceiver = object : BroadcastReceiver() {
+////        override fun onReceive(context: Context?, intent: Intent?) {
+////            when (intent?.action) {
+////                Intent.ACTION_CALL -> {
+////                    //update your main background color
+////                    phonecall()
+////                }
+////                Intent.ACTION_DIAL -> {
+////                    //update your main background color
+////                    phonecall()
+////                }
+////            }
+////        }
+////    }
+//    override fun onStart() {
+//        super.onStart()
+//        registerReceiver(mPlugInReceiver, getIntentFilter())
+//    }
+//    override fun onStop() {
+//        super.onStop()
+//        unregisterReceiver(mPlugInReceiver)
+//    }//open fun broadcastIntent(view: View?): Unit {
+////    val intent = Intent()
+////    intent.action. = "android.intent.action.CALL"
+////    sendBroadcast(intent)
+//    val intent = Intent(Intent.ACTION_CALL);
+//    intent.data = Uri.parse("tel:4444444444")
+//    startActivity(intent)
+//}
+
+
+
+    fun phonecall() {
+        val intent = Intent(Intent.ACTION_CALL);
+        intent.data = Uri.parse("tel:4444444444")
+        startActivity(intent)
+
     }
 
     private fun readContact(){
@@ -126,8 +206,10 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(this, "The best player is $element", Toast.LENGTH_SHORT).show()//
 
-                val intent = Intent(this, Edit::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, Edit::class.java)
+//                startActivity(intent)
+
+
         }
 
 
@@ -193,7 +275,7 @@ class MainActivity : AppCompatActivity() {
 
         val callnowIntent = Intent(this, Receiver::class.java).apply {
             identifier = "now"
-//            action = Context.ALARM_SERVICE
+//            action = Intent.ACTION_CALL
         }
 //        callnowIntent.identifier = "now"
         val callnowPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, callnowIntent, 0)
@@ -208,10 +290,12 @@ class MainActivity : AppCompatActivity() {
         }
         val tomorrowPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, tomorrowIntent, 0)
 
-
-
+//
+//        val drawable: Drawable = ContextCompat.getDrawable(this, R.drawable.your_drawable)
+//        val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
+//
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle("AHHHHHHHHHHHHHHHHHHHHHH")
             .setContentText("help me :(")
 //            .setAutoCancel(true)
