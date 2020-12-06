@@ -31,7 +31,6 @@
     <string name="channel_description">Notification channel for this app</string>
 
 
-
     <!---Strings use for login activity xml -->
     <string name="banner">Call Your Mother</string>
     <string name="bannerDescription">Helping you stay in touch with those you love</string>
@@ -54,6 +53,9 @@
     <string name="titlepage">Account Info</string>
     <string name="accountName">Name: </string>
     <string name="accountEmail">Email Address: </string>
+
+    <!-- FORGOT PASSWORD -->
+    <string name="resetButton">RESET PASSWORD</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser
 
 class Login : AppCompatActivity(), View.OnClickListener {
     private lateinit var register:TextView
+    private var forgotPass: TextView? = null
     private var userEmail: EditText? = null
     private var userPassword: EditText? = null
     private var signIn: Button? = null
@@ -34,6 +35,9 @@ class Login : AppCompatActivity(), View.OnClickListener {
         signIn!!.setOnClickListener(this)
         userEmail = findViewById(R.id.editTextTextEmailAddress)
         userPassword = findViewById(R.id.editTextTextPassword)
+        forgotPass = findViewById(R.id.forgotPassword)
+        forgotPass!!.setOnClickListener(this)
+
 
         progressBar = findViewById(R.id.progressBar)
 
@@ -45,6 +49,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
                 // when you click on register, you're taken to the Registration activity
                 R.id.register -> startActivity(Intent(this, Registration::class.java))
                 R.id.loginButton -> userLogin()
+                R.id.forgotPassword -> startActivity(Intent(this, ForgotPassword::class.java))
             }
         }
     }
