@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.callyourmother">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+
+    <uses-permission android:name="android.permission.READ_CALL_LOG"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -11,11 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Registration"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Login"
-            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -26,11 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
 
         <activity
             android:name=".Login"
+            android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".Registration"
             android:exported="true">
 
         </activity>
@@ -44,7 +47,7 @@
         </receiver>
 
 
-<!--        <service android:name=".MyAlarmService"/>-->
+        <!--        <service android:name=".MyAlarmService"/>-->
 
         <activity android:name=".Edit">
             <intent-filter>
@@ -53,17 +56,19 @@
             </intent-filter>
         </activity>
 
-<!--        <activity-->
-<!--            android:name=".SecondFragment"-->
-<!--            android:label="@string/app_name"-->
-<!--            android:theme="@style/AppTheme.NoActionBar">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--        <activity-->
+        <!--            android:name=".SecondFragment"-->
+        <!--            android:label="@string/app_name"-->
+        <!--            android:theme="@style/AppTheme.NoActionBar">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
->>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
     </application>
+
+
+
 
 </manifest>

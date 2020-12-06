@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    tools:context=".SecondFragment">//-->
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/title"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.004"
+        tools:text="Edit Frequency" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="354dp"
+        android:layout_height="283dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.824"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.638">
+
+
+        <RadioButton
+            android:id="@+id/dayFreq"
+            android:layout_width="342dp"
+            android:layout_height="65dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/radiobutton1"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.424"
+            tools:text="Daily"
+            android:onClick="onRadioButtonClicked"/>
+
+
+        <RadioButton
+            android:id="@+id/weekFreq"
+            android:layout_width="342dp"
+            android:layout_height="65dp"
+            android:fontFamily="sans-serif-medium"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/radiobutton2"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.157"
+            tools:text="Weekly" />
+
+        <RadioButton
+            android:id="@+id/monthFreq"
+            android:layout_width="342dp"
+            android:layout_height="65dp"
+            android:fontFamily="sans-serif-medium"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/radiobutton3"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.768"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.149"
+            tools:text="Monthly" />
+
+        <RadioButton
+            android:id="@+id/yearFreq"
+            android:layout_width="342dp"
+            android:layout_height="65dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/radiobutton4"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.347"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.757"
+            tools:text="Yearly"
+            android:onClick="onRadioButtonClicked"/>
+
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_width="238dp"
+        android:layout_height="45dp"
+        android:text="@string/contact"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.098"
+        tools:text="contact name..." />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="122dp"
+        android:layout_height="50dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/num"
+        android:inputType="numberSigned"
+        android:labelFor="@id/numTimes"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.19"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.301" />
+
+    <TextView
+        android:id="@+id/numTimes"
+        android:layout_width="152dp"
+        android:layout_height="43dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/number"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.318"
+        tools:text="times" />
+
+    <Button
+        android:id="@+id/saveFreq"
+        android:layout_width="118dp"
+        android:layout_height="65dp"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.881" />
+
+    <CheckBox
+        android:id="@+id/textCheckBox"
+        android:layout_width="125dp"
+        android:layout_height="44dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/text"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.227"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.211"
+        tools:text="Texts"
+        android:onClick="onCheckBoxClicked"/>
+
+
+    <CheckBox
+        android:id="@+id/CallcheckBox"
+        android:layout_width="125dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="221dp"
+        android:layout_marginBottom="241dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/call"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.343"
+        tools:text="Calls"
+        android:onClick="onCheckBoxClicked"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
