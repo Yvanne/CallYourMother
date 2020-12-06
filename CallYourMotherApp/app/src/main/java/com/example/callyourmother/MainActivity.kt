@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -18,7 +17,6 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
@@ -30,7 +28,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 //yes
 class MainActivity : AppCompatActivity() {
@@ -55,6 +52,8 @@ class MainActivity : AppCompatActivity() {
     val freq= i.getStringExtra("frequency type")//day/week/month/year*/
 =======
 >>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
+
+
 
 
 //    var yourBR: Receiver? = null
@@ -115,6 +114,12 @@ class MainActivity : AppCompatActivity() {
 //                }
 //            }
 //        }
+
+        var yourBR: Receiver? = null
+        yourBR = Receiver()
+        yourBR.setMainActivityHandler(this)
+        val callInterceptorIntentFilter = IntentFilter("android.intent.action.ANY_ACTION")
+        registerReceiver(yourBR, callInterceptorIntentFilter)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -303,6 +308,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
     fun sendNotification(del: Long) {
 //        val myIntent = Intent(this@MainActivity, Receiver::class.java)
 //        val alarmpendingIntent = PendingIntent.getService(this@MainActivity, 0, myIntent, 0)
@@ -380,6 +387,9 @@ class MainActivity : AppCompatActivity() {
 //    Handler().postDelayed({
 //        //doSomethingHere()
         }, del)
+
+
+
     }
 
 

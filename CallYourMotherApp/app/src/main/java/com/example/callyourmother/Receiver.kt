@@ -17,7 +17,11 @@ class Receiver  : BroadcastReceiver() {
     private var time = 0.toLong()//in ms
     private val curtime = Calendar.getInstance().timeInMillis
 //    private  val curtime = System.currentTimeMillis()
-var yourMain: MainActivity? = null
+//var yourMain: MainActivity? = null
+
+
+    var yourMain: MainActivity? = null
+
 
     fun setMainActivityHandler(main: MainActivity) {
         yourMain = main
@@ -26,6 +30,8 @@ var yourMain: MainActivity? = null
 
 
     override fun onReceive(context: Context, intent: Intent) {
+
+//        yourMain?.sendNotification(2000);
 
 //        val broadcastObserver = BroadcastObserver()
 //        broadcastObserver.triggerObservers()
@@ -119,6 +125,8 @@ var yourMain: MainActivity? = null
 ////            action = Intent.ACTION_CALL
 //            }
 //            sendNotification(d)
+             yourMain?.sendNotification(2000);
+
 
 
 
@@ -166,7 +174,7 @@ var yourMain: MainActivity? = null
 
 
 
-   //    protected abstract fun broadcastResult(connected: Boolean)
+    //    protected abstract fun broadcastResult(connected: Boolean)
 
 }
 
