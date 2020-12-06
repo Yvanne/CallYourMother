@@ -27,6 +27,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 //yes
@@ -266,6 +267,11 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.logout -> {
+                FirebaseAuth.getInstance().signOut()
+                Toast.makeText(applicationContext, "Logged out", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, Login::class.java))
+                return true}
             else -> super.onOptionsItemSelected(item)
         }
     }
