@@ -49,5 +49,24 @@
 
     <string name="channel_description">Notification channel for this app</string>
 
+<<<<<<< HEAD
+=======
+    <!---Strings use for login activity xml -->
+    <string name="banner">Call Your Mother</string>
+    <string name="bannerDescription">Helping you stay in touch with those you love</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="loginButton">LOGIN</string>
+    <string name="register">Register</string>
+    <string name="forgotPassword">Forgot Password</string>
+
+    <!---Strings use for Registration activity xml -->
+    <string name="bannerReg">Call Your Mother</string>
+    <string name="bannerDescriptionReg">Helping you stay in touch with those you love</string>
+    <string name="userName">Full Name</string>
+    <string name="emailReg">Email Address</string>
+    <string name="passwordReg">Password</string>
+    <string name="registerButton">REGISTER</string>
+>>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
 
 </resources>
