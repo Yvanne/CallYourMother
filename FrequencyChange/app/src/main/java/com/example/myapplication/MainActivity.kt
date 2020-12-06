@@ -54,17 +54,22 @@ class MainActivity : AppCompatActivity() {
         // Saving user configurations
         saveButton.setOnClickListener {
 
-            // TODO - gather ToDoItem data
-            Toast.makeText(applicationContext, reminderType+" reminders set "+ numTimes.text.toString()+" times "+str, Toast.LENGTH_LONG).show()
+            //Error if user enters wrong settings
+            if (reminderType.isNullOrEmpty() || numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
+                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
+            }
+            else {
+                // TODO - gather ToDoItem data
+                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str, Toast.LENGTH_LONG).show()
 
+                // TODO - return data Intent to main activity where this will also be sent to notification data
 
-            // TODO - return data Intent to main activity where this will also be sent to notification data
-
-         /*   var dataIntent: Intent = Intent(this, SecondActivity.class)
+                /*   var dataIntent: Intent = Intent(this, SecondActivity.class)
             dataIntent.putExtra("reminder type", reminderType)
             dataIntent.putExtra("number of times", numTimes.toString())
             dataIntent.putExtra("frequency type", str)
             startActivity(dataIntent) */
+            }
 
         }
 

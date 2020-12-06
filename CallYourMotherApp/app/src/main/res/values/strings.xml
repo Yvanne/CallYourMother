@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Call Your Mother</string>
+    <string name="app_name">CallYourMother</string>
     <string name="action_settings">More Info</string>
 
     <!-- Strings used for fragments for navigation -->
@@ -13,23 +13,6 @@
 
     <string name="channel_name">NotificationChannel</string>
 
-
-    <!---Strings use for login activity xml -->
-    <string name="banner">Call Your Mother</string>
-    <string name="bannerDescription">Helping you stay in touch with those you love</string>
-    <string name="email">Email Address</string>
-    <string name="password">Password</string>
-    <string name="loginButton">LOGIN</string>
-    <string name="register">Register</string>
-    <string name="forgotPassword">Forgot Password</string>
-
-    <!---Strings use for Registration activity xml -->
-    <string name="bannerReg">Call Your Mother</string>
-    <string name="bannerDescriptionReg">Helping you stay in touch with those you love</string>
-    <string name="userName">Full Name</string>
-    <string name="emailReg">Email Address</string>
-    <string name="passwordReg">Password</string>
-    <string name="registerButton">REGISTER</string>
 
     <!--    YVONNE-->
     <string name="title">EDIT FREQUENCY</string>
@@ -49,5 +32,21 @@
 
     <string name="channel_description">Notification channel for this app</string>
 
+    <!---Strings use for login activity xml -->
+    <string name="banner">Call Your Mother</string>
+    <string name="bannerDescription">Helping you stay in touch with those you love</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="loginButton">LOGIN</string>
+    <string name="register">Register</string>
+    <string name="forgotPassword">Forgot Password</string>
+
+    <!---Strings use for Registration activity xml -->
+    <string name="bannerReg">Call Your Mother</string>
+    <string name="bannerDescriptionReg">Helping you stay in touch with those you love</string>
+    <string name="userName">Full Name</string>
+    <string name="emailReg">Email Address</string>
+    <string name="passwordReg">Password</string>
+    <string name="registerButton">REGISTER</string>
 
 </resources>
