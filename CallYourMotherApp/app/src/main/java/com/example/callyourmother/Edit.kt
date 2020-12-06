@@ -27,6 +27,8 @@ class Edit : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_2)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
 
         name = findViewById(R.id.contactName)
         numTimes = findViewById(R.id.editTextNumber)

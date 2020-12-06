@@ -13,7 +13,7 @@
 
     <string name="channel_name">NotificationChannel</string>
 
-    <!--    YVONNE-->
+    <!--    YVANNE-->
     <string name="title">EDIT FREQUENCY</string>
     <string name="radiobutton1">Daily</string>
     <string name="radiobutton2">Weekly</string>
@@ -31,7 +31,7 @@
     <string name="channel_description">Notification channel for this app</string>
 
 
-=======
+
     <!---Strings use for login activity xml -->
     <string name="banner">Call Your Mother</string>
     <string name="bannerDescription">Helping you stay in touch with those you love</string>
@@ -48,6 +48,12 @@
     <string name="emailReg">Email Address</string>
     <string name="passwordReg">Password</string>
     <string name="registerButton">REGISTER</string>
->>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
+    <string name="title_activity_user_info">UserInfo</string>
+
+    <!-- USER INFO -->
+    <string name="titlepage">Account Info</string>
+    <string name="accountName">Name: </string>
+    <string name="accountEmail">Email Address: </string>
+
 
 </resources>

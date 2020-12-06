@@ -86,7 +86,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
             .addOnCompleteListener { task ->
                 progressBar!!.visibility = View.GONE
                 if (task.isSuccessful) {
-                    var user: FirebaseUser? = FirebaseAuth.getInstance()!!.currentUser
+                    var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
                     if (user!!.isEmailVerified) {
                         Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG).show()
                         val intent = Intent(this@Login, MainActivity::class.java)

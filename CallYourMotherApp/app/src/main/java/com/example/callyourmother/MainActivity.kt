@@ -272,6 +272,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Logged out", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@MainActivity, Login::class.java))
                 return true}
+            R.id.account -> {
+                startActivity(Intent(this@MainActivity, UserInfo::class.java))
+                return true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
