@@ -48,6 +48,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
+<<<<<<< HEAD
+  /* private val i: Intent = intent //getIntent()
+    val type= i.getStringExtra("reminder type")//text/call
+    val times = i.getStringExtra("number of times")
+    val freq= i.getStringExtra("frequency type")//day/week/month/year*/
+=======
+>>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
 
 
 //    var yourBR: Receiver? = null

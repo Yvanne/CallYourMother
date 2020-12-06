@@ -96,8 +96,13 @@ class Registration : AppCompatActivity(), View.OnClickListener {
                         .child(FirebaseAuth.getInstance().currentUser!!.uid)
                         .setValue(user).addOnCompleteListener( OnCompleteListener<Void> { task ->
                             if (task.isSuccessful) {
+<<<<<<< HEAD
                                  Toast.makeText(applicationContext, "New user registration successful!", Toast.LENGTH_LONG).show()
                                  progressBar!!.visibility = View.GONE
+=======
+                                Toast.makeText(applicationContext, "New user registration successful!", Toast.LENGTH_LONG).show()
+                                progressBar!!.visibility = View.GONE
+>>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
 
                             } else {
                                 //display a failure message
@@ -111,8 +116,11 @@ class Registration : AppCompatActivity(), View.OnClickListener {
                 }
             })
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 31b546b712d04a3fd200b8a579c0ef66635ad465
     }
 }
