@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity() {
             cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
         )
 
-       // if(rs?.moveToNext()!!)
-         //   Toast.makeText(applicationContext, rs.getString(1), Toast.LENGTH_LONG).show()
+       //if(rs?.moveToNext()!!)
+         //Toast.makeText(applicationContext, rs.getString(0), Toast.LENGTH_LONG).show()
 
         var adapter = SimpleCursorAdapter(
             this,
@@ -77,13 +77,8 @@ class MainActivity : AppCompatActivity() {
 
         listView.onItemClickListener =
             OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
-                var n = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-                // Display item position in toast.
-                Toast.makeText(applicationContext, "The position is: $position $n", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(applicationContext, "Editing reminder frequency for: " + rs?.getString(0), Toast.LENGTH_LONG).show()
             }
-
-
 
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -97,6 +92,11 @@ class MainActivity : AppCompatActivity() {
                     cols, "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ?",
                     Array(1) { "%$p0%" }, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                 )
+                listView.onItemClickListener =
+                    OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
+                        Toast.makeText(applicationContext, "Editing reminder frequency for: " + rs?.getString(0), Toast.LENGTH_LONG).show()
+                    }
+
                 adapter.changeCursor(rs)
                 return false
             }
@@ -149,4 +149,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
+
+
+
+
+
+
 
