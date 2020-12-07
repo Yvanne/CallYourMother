@@ -1,5 +1,6 @@
 package com.example.callyourmother
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -76,23 +77,23 @@ class Edit : AppCompatActivity() {
                 // TODO - gather ToDoItem data
                 Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for "+ type, Toast.LENGTH_LONG).show()
 
+            // SAVING USER SETTING INFO TO FIREBASE
+            contact.name = type
+            contact.setting = reminderType + " reminders set " + numTimes.text.toString() + " times " + str
+            ref.push().setValue(contact)
+            Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
+
                 // TODO - return data Intent to main activity where this will also be sent to notification data
-                var dataIntent: Intent = Intent(this, MainActivity::class.java)
-                dataIntent.putExtra("reminder type", reminderType)
+                var dataIntent: Intent = Intent(this@Edit, MainActivity::class.java)
+                dataIntent.putExtra("reminder type", reminderType.toString())
                 dataIntent.putExtra("number of times", numTimes.toString())
-                dataIntent.putExtra("frequency type", str)
-                dataIntent.putExtra("name", name.toString())
-                dataIntent.putExtra("phone", phone)
-                startActivity(dataIntent)
+                dataIntent.putExtra("frequency type", str.toString())
+               // dataIntent.putExtra("name", name.toString())
+               // dataIntent.putExtra("phone", phone)
+               startActivity(dataIntent)
+               //finish()
                 //MainActivity().determineDelay()
 
-
-
-            // SAVING USER SETTING INFO TO FIREBASE
-                contact.name = type
-                contact.setting = reminderType + " reminders set " + numTimes.text.toString() + " times " + str
-                ref.push().setValue(contact)
-                Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
 
             }
        // }

@@ -1,10 +1,7 @@
 package com.example.callyourmother
 
 import android.Manifest
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -67,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
 //        val delay = 3000
 //        alarmHandle(delay)
-
+        i = intent
         registerReceiver(broadcastReceiver, IntentFilter("broadCastName"));
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -84,13 +81,15 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener {
             val intent = Intent(this, Edit::class.java)
             startActivity(intent)
+          //  finish()
 
-             i = intent //getIntent()
+             i = getIntent()
              type = i!!.getStringExtra("reminder type")//text/call
              times = i!!.getStringExtra("number of times")
              freq = i!!.getStringExtra("frequency type")//day/week/month/year
             contactName = i!!.getStringExtra("name")
             contactNum = i!!.getStringExtra("phone")
+            Log.i("TAG", type + " HERE "+ contactNum + " "+i)
 
         }
 
@@ -165,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         //contactName = rs?.getString(0)
         //contactNum = rs?.getString(1)
 
-//val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_2, 0)
+//MASTER CONTACT LIST
         var adapter =
             SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
@@ -177,16 +176,44 @@ class MainActivity : AppCompatActivity() {
                     "Editing reminder frequency for: " + rs?.getString(0),
                     Toast.LENGTH_LONG
                 ).show()
-                var dataIntent: Intent = Intent(this, Edit::class.java)
-                dataIntent.putExtra("name", rs?.getString(0))
-                dataIntent.putExtra("phone",rs?.getString(1) )
-                startActivity(dataIntent)
-                determineDelay()
+                var dataMain: Intent = Intent(this, Edit::class.java)
+                dataMain.putExtra("name", rs?.getString(0))
+                dataMain.putExtra("phone",rs?.getString(1) )
+                startActivity(dataMain)
+                //finish()
+
+
+                /*i = getIntent()
+                type = i!!.getStringExtra("reminder type")//text/call
+                times = i!!.getStringExtra("number of times")
+                freq = i!!.getStringExtra("frequency type")//day/week/month/year
+                contactName = i!!.getStringExtra("name")
+                contactNum = i!!.getStringExtra("phone")*/
+
+               // val intent:Intent = getIntent()
+                Log.i("TAG", "IS NULLER"+i?.extras)
+
+                val bundle :Bundle ?= i?.extras
+                if (bundle!=null){
+                    //     val message = bundle.getString("object") // 1
+                    Log.i("TAG", type + " HeeeeeeeERE "+ contactNum )
+
+                    //Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
+                    determineDelay()
+                } else {
+                    Log.i("TAG", "IS NULL")
+
+                    Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
+                }
+
+
+                // onActivityResult(8, RESULT_OK, )
+                //dataIntent.getStringExtra("name")?.let { Log.i("TAG", it) }
             }
 
 
 
-
+            // SEARCHING FOR CONTACTS
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
@@ -213,7 +240,16 @@ class MainActivity : AppCompatActivity() {
                         dataIntent.putExtra("name", rs?.getString(0))
                         dataIntent.putExtra("phone",rs?.getString(1) )
                         startActivity(dataIntent)
-                        determineDelay()
+                        finish()
+
+                        val bundle :Bundle ?=dataIntent.extras
+                       if (bundle!=null){
+                            //     val message = bundle.getString("object") // 1
+                            Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
+                            determineDelay()
+                        } else {
+                            Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 return false
             }
