@@ -349,7 +349,7 @@ class MainActivity : AppCompatActivity() {
                 val d : Long = 2000
                 Log.i("tag", d.toString())
 
-                sendNotification(7000)
+                sendNotification(7200000)
             }
 
 
@@ -358,7 +358,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(context, "Snoozed for 24 hours.", length).show()//
 
 //                time = (System.currentTimeMillis() + 86400000)
-                sendNotification(1000)
+                sendNotification(86400000)
 
             }
 
