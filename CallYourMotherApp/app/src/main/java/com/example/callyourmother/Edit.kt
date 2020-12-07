@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class Edit : AppCompatActivity() {
@@ -21,6 +23,7 @@ class Edit : AppCompatActivity() {
     private lateinit var yearRadio: RadioButton
     private lateinit var textChecked: CheckBox
     private lateinit var callChecked: CheckBox
+    private lateinit var ref: DatabaseReference
 
 
 
@@ -39,12 +42,16 @@ class Edit : AppCompatActivity() {
         yearRadio = findViewById(R.id.yearFreq)
         callChecked = findViewById(R.id.CallcheckBox)
         textChecked = findViewById(R.id.textCheckBox)
+        var contact: Contact = Contact()
+        ref = FirebaseDatabase.getInstance().reference.child("Contacts");
+
 
 
         // TODO: get the contact's name from mainActivity
         // probably through an intent
         val i: Intent = intent //getIntent()
         val type= i.getStringExtra("name")
+        val phone = i.getStringExtra("phone")
         name.setText(type)
 
 
@@ -62,11 +69,12 @@ class Edit : AppCompatActivity() {
         saveButton.setOnClickListener {
 
             //Error if user enters wrong settings
-            if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
-                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
-            } else {
+          //  if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
+               // Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
+           // }
+            //else {
                 // TODO - gather ToDoItem data
-                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for "+ name, Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for "+ type, Toast.LENGTH_LONG).show()
 
                 // TODO - return data Intent to main activity where this will also be sent to notification data
                 var dataIntent: Intent = Intent(this, MainActivity::class.java)
@@ -74,9 +82,20 @@ class Edit : AppCompatActivity() {
                 dataIntent.putExtra("number of times", numTimes.toString())
                 dataIntent.putExtra("frequency type", str)
                 dataIntent.putExtra("name", name.toString())
+                dataIntent.putExtra("phone", phone)
                 startActivity(dataIntent)
+                //MainActivity().determineDelay()
+
+
+
+            // SAVING USER SETTING INFO TO FIREBASE
+                contact.name = type
+                contact.setting = reminderType + " reminders set " + numTimes.text.toString() + " times " + str
+                ref.push().setValue(contact)
+                Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
+
             }
-        }
+       // }
 
 
     }
@@ -89,7 +108,6 @@ class Edit : AppCompatActivity() {
             reminderType = "call"
         else if(textChecked.isChecked)
             reminderType = "text"
-        //Toast.makeText(applicationContext, reminderType+" reminder types selected", Toast.LENGTH_SHORT).show()
     }
 
     // Get how often to be reminded such as by days, weeks, months or years
@@ -103,6 +121,5 @@ class Edit : AppCompatActivity() {
         else
             str = "Yearly"
 
-//        Toast.makeText(applicationContext, str+" reminder selected", Toast.LENGTH_SHORT).show()
     }
 }

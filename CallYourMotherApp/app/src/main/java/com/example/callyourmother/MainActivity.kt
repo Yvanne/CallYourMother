@@ -45,7 +45,12 @@ class MainActivity : AppCompatActivity() {
     private val CHANNEL_ID = "channel_id"
     public var notificationId = 101
     public var contactName: String? = null
-    val delay : Long = 1000 //in milliseconds
+    public var contactNum: String? = null
+    val delay: Long = 1000 //in milliseconds
+     var i:Intent? = null
+     var  type: String? = null
+    var times : String? = null
+    var freq : String? = null
 //    private val mNotificationTime = Calendar.getInstance().timeInMillis + time
 
 
@@ -73,18 +78,20 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
 
         button2.setOnClickListener {
-            sendNotification(delay)
+            sendNotification(0)
 //            NotificationUtils().setNotification(delay.toLong(), this@MainActivity)
         }
         button.setOnClickListener {
             val intent = Intent(this, Edit::class.java)
             startActivity(intent)
 
-            val i: Intent = intent //getIntent()
-            val type = i.getStringExtra("reminder type")//text/call
-            val times = i.getStringExtra("number of times")
-            val freq = i.getStringExtra("frequency type")//day/week/month/year
-            contactName = i.getStringExtra("name")
+             i = intent //getIntent()
+             type = i!!.getStringExtra("reminder type")//text/call
+             times = i!!.getStringExtra("number of times")
+             freq = i!!.getStringExtra("frequency type")//day/week/month/year
+            contactName = i!!.getStringExtra("name")
+            contactNum = i!!.getStringExtra("phone")
+
         }
 
         //ask for permission multiple times
@@ -115,44 +122,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             readContact()
         }
-   /*     if(requestCode == 112 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
-                Toast.makeText(applicationContext, "This permission is required for this app.", Toast.LENGTH_LONG).show()
-            }
-        }*/
+        /*     if(requestCode == 112 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                     ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
+                     Toast.makeText(applicationContext, "This permission is required for this app.", Toast.LENGTH_LONG).show()
+                 }
+             }*/
 
     }
 
 
-
-    fun phonecall() {
+    /*fun phonecall() {
         val intent = Intent(Intent.ACTION_CALL);
-        intent.data = Uri.parse("tel:4444444444")
+        intent.data = Uri.parse("tel:"+ contactNum)
         startActivity(intent)
-    }
+    }*/
 
-    private fun readContact(){
-        var from = listOf<String>( ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.NUMBER).toTypedArray()
+    private fun readContact() {
+        var from = listOf<String>(
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
+        ).toTypedArray()
 
 //            Log.i("tag", "ahh")
 
         var to = intArrayOf(android.R.id.text1, android.R.id.text2)
 
         //sort based on name
-        var rs = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+        var rs = contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+        )
         //contactName = rs?.getString(0)
-
+        //contactNum = rs?.getString(1)
 
 //val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_2, 0)
-        var adapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
+        var adapter =
+            SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
         listView.adapter = adapter
         listView.onItemClickListener =
@@ -163,24 +178,28 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
                 var dataIntent: Intent = Intent(this, Edit::class.java)
-                dataIntent.putExtra("name",rs?.getString(0) )
+                dataIntent.putExtra("name", rs?.getString(0))
+                dataIntent.putExtra("phone",rs?.getString(1) )
                 startActivity(dataIntent)
+                determineDelay()
             }
 
 
 
 
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                var rs = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                var rs = contentResolver.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                     cols,
                     "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ?",
-                    Array(1){"%$p0%"},
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                    Array(1) { "%$p0%" },
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+                )
                 adapter.changeCursor(rs)
                 listView.onItemClickListener =
                     AdapterView.OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
@@ -191,13 +210,69 @@ class MainActivity : AppCompatActivity() {
                         ).show()
 
                         var dataIntent: Intent = Intent(this@MainActivity, Edit::class.java)
-                        dataIntent.putExtra("name",rs?.getString(0) )
+                        dataIntent.putExtra("name", rs?.getString(0))
+                        dataIntent.putExtra("phone",rs?.getString(1) )
                         startActivity(dataIntent)
+                        determineDelay()
                     }
                 return false
             }
 
         })
+    }
+
+    fun phonecall() {
+        val intent = Intent(Intent.ACTION_CALL);
+        intent.data = Uri.parse("tel:$contactNum")
+        startActivity(intent)
+    }
+
+    fun determineDelay() {
+        Log.i("TAG", "HELOOOOOOOOOOOOO")
+        val day : Long = 86400000
+        val week : Long = day * 7
+        val month : Long = day * 30
+        val year : Long = week * 52
+
+        /*val i: Intent = intent //getIntent()
+        val type = i.getStringExtra("reminder type")//text/call
+        val times = i.getStringExtra("number of times")
+        val freq = i.getStringExtra("frequency type")//day/week/month/year
+        contactName = i.getStringExtra("name")*/
+
+       // val time = times?.toLong()
+        var  ret :Long  = 3000
+
+    /*    if (time != null) {
+            Log.i("TAG", time.toString())
+        }
+        if (type != null) {
+            Log.i("TAG", type)
+        }
+        if (freq != null) {
+            Log.i("TAG", freq)
+        }*/
+        if(freq === "day"){
+            if (times != null) {
+                ret =  day/ times!!.toLong()
+            }
+        } else if (freq == "week"){
+            if (times != null) {
+                ret = week/ times!!.toLong()
+            }
+        } else if (freq == "month"){
+            if (times != null) {
+                ret = month/ times!!.toLong()
+            }
+        } else {//year
+            if (times != null) {
+                ret =  year/ times!!.toLong()
+            }
+        }
+//        return freq/times
+
+        sendNotification(ret)
+
     }
 
 
@@ -217,7 +292,8 @@ class MainActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signOut()
                 Toast.makeText(applicationContext, "Logged out", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@MainActivity, Login::class.java))
-                return true}
+                return true
+            }
             R.id.account -> {
                 startActivity(Intent(this@MainActivity, UserInfo::class.java))
                 return true
@@ -239,7 +315,8 @@ class MainActivity : AppCompatActivity() {
                 description = descriptionText
             }
             // Register the channel with the system
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -281,7 +358,7 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle("Call "+contactName)
+                .setContentTitle("Call " + contactName)
                 .setContentText("help me :(")
                 .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
 //            .setAutoCancel(true)
@@ -315,10 +392,7 @@ class MainActivity : AppCompatActivity() {
         }, del)
 
 
-
     }
-
-
 
 
     var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -332,8 +406,8 @@ class MainActivity : AppCompatActivity() {
             val id = intent.extras!!.getString("identifier")
 
             val length = Toast.LENGTH_SHORT
-            if(id == "now"){
-                Log.i("tag","clicked call now");
+            if (id == "now") {
+                Log.i("tag", "clicked call now");
                 Toast.makeText(context, "calling", length).show()//
 
                 phonecall()
@@ -341,20 +415,20 @@ class MainActivity : AppCompatActivity() {
 //                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //                notificationManager.cancel(MainActivity().notificationId)
             }
-            if(id == "later"){
-                Log.i("tag","clicked snooze");
+            if (id == "later") {
+                Log.i("tag", "clicked snooze");
                 Toast.makeText(context, "Reminder Snoozed", length).show()//
 
 //                time = (System.currentTimeMillis() + 7200000)
-                val d : Long = 2000
+                val d: Long = 2000
                 Log.i("tag", d.toString())
 
                 sendNotification(7200000)
             }
 
 
-            if(id == "tomorrow"){
-                Log.i("tag","clicked tomorrow");
+            if (id == "tomorrow") {
+                Log.i("tag", "clicked tomorrow");
                 Toast.makeText(context, "Snoozed for 24 hours.", length).show()//
 
 //                time = (System.currentTimeMillis() + 86400000)
@@ -364,7 +438,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 
 
 }
