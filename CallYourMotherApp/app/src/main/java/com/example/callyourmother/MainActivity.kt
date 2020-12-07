@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -17,6 +18,8 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.SearchView
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private val CHANNEL_ID = "channel_id"
     public var notificationId = 101
+    public var contactName: String? = null
     val delay : Long = 1000 //in milliseconds
 //    private val mNotificationTime = Calendar.getInstance().timeInMillis + time
 
@@ -59,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 //        val delay = 3000
 //        alarmHandle(delay)
 
-
+        registerReceiver(broadcastReceiver, IntentFilter("broadCastName"));
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -77,38 +81,38 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
             val i: Intent = intent //getIntent()
-            val type= i.getStringExtra("reminder type")//text/call
+            val type = i.getStringExtra("reminder type")//text/call
             val times = i.getStringExtra("number of times")
-            val freq= i.getStringExtra("frequency type")//day/week/month/year
+            val freq = i.getStringExtra("frequency type")//day/week/month/year
+            contactName = i.getStringExtra("name")
         }
 
         //ask for permission multiple times
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.READ_CONTACTS }, 111)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                Array(1) { Manifest.permission.READ_CONTACTS },
+                111
+            )
         } else {
             readContact()
         }
 
-        /////////////////////
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
-        } else {
-            //has perm
-//           phonecall()
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                Array(1) { Manifest.permission.CALL_PHONE },
+                112
+            )///
         }
-//        var receiver = object : Receiver() {
-//            override fun broadcastResult(connected: Boolean) {
-//                if(isConnected){
-//                    phonecall()
-//                }
-//            }
-//        }
-
-        var yourBR: Receiver? = null
-        yourBR = Receiver()
-        yourBR.setMainActivityHandler(this)
-        val callInterceptorIntentFilter = IntentFilter("android.intent.action.ANY_ACTION")
-        registerReceiver(yourBR, callInterceptorIntentFilter)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -116,78 +120,14 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             readContact()
         }
-//        if(requestCode == 112 && grantResults[0] == PackageManager.PERMISSION_GRANTED){//call
-//            phonecall()
-//        }
-    }
+   /*     if(requestCode == 112 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
+                Toast.makeText(applicationContext, "This permission is required for this app.", Toast.LENGTH_LONG).show()
+            }
+        }*/
 
-//    private val mPlugInReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            if(intent.identifier == "now"){
-//                Log.i("tag","clicked call now");
-//                Toast.makeText(context, "calling", Toast.LENGTH_LONG).show()//
-//
-//            phonecall()
-////            val intent = Intent(Intent.ACTION_CALL);
-////            intent.data = Uri.parse("tel:4444444444")
-////            startActivity(intent)
-//
-//
-//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                notificationManager.cancel(MainActivity().notificationId)
-//            }
-//            if(intent.identifier == "later"){
-//                Log.i("tag","clicked snooze");
-//                Toast.makeText(context, "Reminder Snoozed", Toast.LENGTH_LONG).show()//
-//
-//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                notificationManager.cancel(MainActivity().notificationId)
-//            }
-//            if(intent.identifier == "tomorrow"){
-//                Log.i("tag","clicked tomorrow");
-//                Toast.makeText(context, "Snoozed for 24 hours.", Toast.LENGTH_LONG).show()//
-//
-//
-//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                notificationManager.cancel(MainActivity().notificationId)
-//            }
-//        }
-//    }
-//    private fun getIntentFilter(): IntentFilter {
-//        val iFilter = IntentFilter()
-//        iFilter.addAction(Intent.ACTION_POWER_CONNECTED)
-//        iFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
-//        return iFilter
-//    }
-////    private val mPlugInReceiver = object : BroadcastReceiver() {
-////        override fun onReceive(context: Context?, intent: Intent?) {
-////            when (intent?.action) {
-////                Intent.ACTION_CALL -> {
-////                    //update your main background color
-////                    phonecall()
-////                }
-////                Intent.ACTION_DIAL -> {
-////                    //update your main background color
-////                    phonecall()
-////                }
-////            }
-////        }
-////    }
-//    override fun onStart() {
-//        super.onStart()
-//        registerReceiver(mPlugInReceiver, getIntentFilter())
-//    }
-//    override fun onStop() {
-//        super.onStop()
-//        unregisterReceiver(mPlugInReceiver)
-//    }//open fun broadcastIntent(view: View?): Unit {
-////    val intent = Intent()
-////    intent.action. = "android.intent.action.CALL"
-////    sendBroadcast(intent)
-//    val intent = Intent(Intent.ACTION_CALL);
-//    intent.data = Uri.parse("tel:4444444444")
-//    startActivity(intent)
-//}
+    }
 
 
 
@@ -195,7 +135,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_CALL);
         intent.data = Uri.parse("tel:4444444444")
         startActivity(intent)
-
     }
 
     private fun readContact(){
@@ -209,31 +148,26 @@ class MainActivity : AppCompatActivity() {
         //sort based on name
         var rs = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+        //contactName = rs?.getString(0)
 
 
 //val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_2, 0)
         var adapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
         listView.adapter = adapter
+        listView.onItemClickListener =
+            AdapterView.OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
+                Toast.makeText(
+                    applicationContext,
+                    "Editing reminder frequency for: " + rs?.getString(0),
+                    Toast.LENGTH_LONG
+                ).show()
+                var dataIntent: Intent = Intent(this, Edit::class.java)
+                dataIntent.putExtra("name",rs?.getString(0) )
+                startActivity(dataIntent)
+            }
 
 
-//            listView.setOnItemClickListener { parent, view, position, id ->
-//                val element = adapter.getItemAtPosition(position) // The item that was clicked
-//            }
-        listView.setOnItemClickListener { parent, view, position, id ->
-//            val element = adapter.getView(position,view,parent)// The item that was clicked
-//                val intent = Intent(this, BookDetailActivity::class.java)
-//                startActivity(intent)
-            val element = adapter.getItem(position).hashCode()
-            Log.i("tag", "onclickcontactyay")
-
-            Toast.makeText(this, "The best player is $element", Toast.LENGTH_SHORT).show()//
-
-//                val intent = Intent(this, Edit::class.java)
-//                startActivity(intent)
-
-
-        }
 
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
@@ -248,6 +182,18 @@ class MainActivity : AppCompatActivity() {
                     Array(1){"%$p0%"},
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
                 adapter.changeCursor(rs)
+                listView.onItemClickListener =
+                    AdapterView.OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
+                        Toast.makeText(
+                            applicationContext,
+                            "Editing reminder frequency for: " + rs?.getString(0),
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        var dataIntent: Intent = Intent(this@MainActivity, Edit::class.java)
+                        dataIntent.putExtra("name",rs?.getString(0) )
+                        startActivity(dataIntent)
+                    }
                 return false
             }
 
@@ -298,23 +244,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun alarmHandle(delay : Int){
-        val myIntent = Intent(this@MainActivity, Receiver::class.java)
-        val pendingIntent = PendingIntent.getService(this@MainActivity, 0, myIntent, 0)
-
-        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
-
-    }
-
-
 
     fun sendNotification(del: Long) {
-//        val myIntent = Intent(this@MainActivity, Receiver::class.java)
-//        val alarmpendingIntent = PendingIntent.getService(this@MainActivity, 0, myIntent, 0)
 
-//        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, alarmpendingIntent)
 
         val landingIntent = Intent(this, Receiver::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -346,15 +278,10 @@ class MainActivity : AppCompatActivity() {
         val tomorrowPendingIntent: PendingIntent =
             PendingIntent.getBroadcast(this, 0, tomorrowIntent, 0)
 
-//
-//        val drawable: Drawable = ContextCompat.getDrawable(this, R.drawable.your_drawable)
-//        val bitmap: Bitmap = (drawable as BitmapDrawable).getBitmap()
-//
-//        Timer().schedule(2000.toLong()){
         Handler().postDelayed({
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle("AHHHHHHHHHHHHHHHHHHHHHH")
+                .setContentTitle("Call "+contactName)
                 .setContentText("help me :(")
                 .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
 //            .setAutoCancel(true)
@@ -390,6 +317,54 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
+
+
+    var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val b = intent.extras
+            val message = b!!.getString("message")
+            Log.i("tag", "" + message)
+
+
+//            val id = intent.extras
+            val id = intent.extras!!.getString("identifier")
+
+            val length = Toast.LENGTH_SHORT
+            if(id == "now"){
+                Log.i("tag","clicked call now");
+                Toast.makeText(context, "calling", length).show()//
+
+                phonecall()
+
+//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//                notificationManager.cancel(MainActivity().notificationId)
+            }
+            if(id == "later"){
+                Log.i("tag","clicked snooze");
+                Toast.makeText(context, "Reminder Snoozed", length).show()//
+
+//                time = (System.currentTimeMillis() + 7200000)
+                val d : Long = 2000
+                Log.i("tag", d.toString())
+
+                sendNotification(7000)
+            }
+
+
+            if(id == "tomorrow"){
+                Log.i("tag","clicked tomorrow");
+                Toast.makeText(context, "Snoozed for 24 hours.", length).show()//
+
+//                time = (System.currentTimeMillis() + 86400000)
+                sendNotification(1000)
+
+            }
+
+        }
+    }
+
 
 
 }

@@ -43,6 +43,10 @@ class Edit : AppCompatActivity() {
 
         // TODO: get the contact's name from mainActivity
         // probably through an intent
+        val i: Intent = intent //getIntent()
+        val type= i.getStringExtra("name")
+        name.setText(type)
+
 
 
         // Are we editing calls, texts or boths
@@ -59,17 +63,17 @@ class Edit : AppCompatActivity() {
 
             //Error if user enters wrong settings
             if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
-                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
             } else {
                 // TODO - gather ToDoItem data
-                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for "+ name, Toast.LENGTH_LONG).show()
 
                 // TODO - return data Intent to main activity where this will also be sent to notification data
-
                 var dataIntent: Intent = Intent(this, MainActivity::class.java)
                 dataIntent.putExtra("reminder type", reminderType)
                 dataIntent.putExtra("number of times", numTimes.toString())
                 dataIntent.putExtra("frequency type", str)
+                dataIntent.putExtra("name", name.toString())
                 startActivity(dataIntent)
             }
         }
