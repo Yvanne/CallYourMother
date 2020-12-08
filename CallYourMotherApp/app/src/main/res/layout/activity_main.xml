@@ -22,22 +22,15 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <include layout="@layout/content_main" />
 
-    <Button
+    <!--<Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:text="Notifywhooo" />
+        android:text="Notifywhooo" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -54,16 +47,16 @@
         <!--            app:layout_constraintHorizontal_bias="1.0"-->
         <!--            app:layout_constraintStart_toStartOf="parent"-->
         <!--            app:layout_constraintTop_toTopOf="parent" />-->
-        <Button
+      <!--  <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#0CCBDC"
-            android:text="@string/next"
+            android:text="@string/set"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />-->
 
         <SearchView
             android:id="@+id/searchView"
@@ -85,6 +78,44 @@
             tools:layout_editor_absoluteY="65dp"
             app:layout_constraintTop_toBottomOf="@id/searchView"
             app:layout_constraintVertical_bias="1.0" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:tint="#FDFDFD"
+            android:contentDescription="All Contacts"
+            android:text="All Contacts"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="1dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="Edited Contacts"
+            android:text="Edited Contacts"
+            android:tint="#FDFDFD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/imageButton"
+            app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="Edited Contacts"
+            android:text="Edited Contacts"
+            android:tint="#FDFDFD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/imageButton2"
+            app:srcCompat="@android:drawable/ic_menu_info_details" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

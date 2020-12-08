@@ -167,30 +167,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.881" />
 
+
     <CheckBox
         android:id="@+id/textCheckBox"
         android:layout_width="125dp"
         android:layout_height="44dp"
         android:fontFamily="sans-serif-black"
+        android:onClick="onCheckBoxClicked"
         android:text="@string/text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.227"
+        app:layout_constraintHorizontal_bias="0.216"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211"
-        tools:text="Texts"
-        android:onClick="onCheckBoxClicked"/>
-
+        app:layout_constraintVertical_bias="0.199"
+        tools:text="Texts" />
 
     <CheckBox
         android:id="@+id/CallcheckBox"
-        android:layout_width="125dp"
-        android:layout_height="44dp"
+        android:layout_width="131dp"
+        android:layout_height="46dp"
         android:layout_marginStart="221dp"
         android:layout_marginBottom="241dp"
         android:fontFamily="sans-serif-black"
+        android:onClick="onCheckBoxClicked"
         android:text="@string/call"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -198,7 +199,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.343"
-        tools:text="Calls"
-        android:onClick="onCheckBoxClicked"/>
+        app:layout_constraintVertical_bias="0.308"
+        tools:text="Calls" />
 </androidx.constraintlayout.widget.ConstraintLayout>

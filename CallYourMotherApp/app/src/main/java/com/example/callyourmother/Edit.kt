@@ -25,6 +25,7 @@ class Edit : AppCompatActivity() {
     private lateinit var textChecked: CheckBox
     private lateinit var callChecked: CheckBox
     private lateinit var ref: DatabaseReference
+    private val names: MutableList<String> = mutableListOf()
 
 
 
@@ -70,33 +71,41 @@ class Edit : AppCompatActivity() {
         saveButton.setOnClickListener {
 
             //Error if user enters wrong settings
-          //  if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
-               // Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
-           // }
-            //else {
-                // TODO - gather ToDoItem data
-                Toast.makeText(applicationContext, reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for "+ type, Toast.LENGTH_LONG).show()
+            if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
+                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
+            }
+            else {
+            // TODO - gather ToDoItem data
+            Toast.makeText(
+                applicationContext,
+                reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for " + type,
+                Toast.LENGTH_LONG
+            ).show()
 
+                names.add(name.toString())
             // SAVING USER SETTING INFO TO FIREBASE
             contact.name = type
-            contact.setting = reminderType + " reminders set " + numTimes.text.toString() + " times " + str
+            contact.setting =
+                reminderType + " reminders set " + numTimes.text.toString() + " times " + str
             ref.push().setValue(contact)
             Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
 
-                // TODO - return data Intent to main activity where this will also be sent to notification data
-                var dataIntent: Intent = Intent(this@Edit, MainActivity::class.java)
-                dataIntent.putExtra("reminder type", reminderType.toString())
-                dataIntent.putExtra("number of times", numTimes.toString())
-                dataIntent.putExtra("frequency type", str.toString())
-               // dataIntent.putExtra("name", name.toString())
-               // dataIntent.putExtra("phone", phone)
-               startActivity(dataIntent)
-               //finish()
-                //MainActivity().determineDelay()
+            // TODO - return data Intent to main activity where this will also be sent to notification data
+            var dataIntent: Intent = Intent(this@Edit, MainActivity::class.java)
+            dataIntent.putExtra("reminder type", reminderType.toString())
+            dataIntent.putExtra("number of times", numTimes.toString())
+            dataIntent.putExtra("frequency type", str.toString())
+            dataIntent.putExtra("name", name.toString())
+            dataIntent.putExtra("phone", phone)
 
 
-            }
-       // }
+
+            startActivity(dataIntent)
+            //finish()
+
+
+        }
+        }
 
 
     }

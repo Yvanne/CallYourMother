@@ -2,11 +2,9 @@ package com.example.callyourmother
 
 import android.Manifest
 import android.app.*
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,10 +14,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.SearchView
-import android.widget.SimpleCursorAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -41,55 +36,76 @@ class MainActivity : AppCompatActivity() {
 
     private val CHANNEL_ID = "channel_id"
     public var notificationId = 101
-    public var contactName: String? = null
-    public var contactNum: String? = null
+    public var contactName = "Amanda Melvin"
+    public var contactNum = "2403160806"
     val delay: Long = 1000 //in milliseconds
      var i:Intent? = null
      var  type: String? = null
     var times : String? = null
     var freq : String? = null
-//    private val mNotificationTime = Calendar.getInstance().timeInMillis + time
+
+    private var buttonContacts: ImageButton? = null
+    private var editButton: ImageButton? = null
+    private  var instructButton: ImageButton? = null
 
 
-//    var yourBR: Receiver? = null
-//    yourBR = Receiver()
-//    yourBR.setMainActivityHandler(this)
-//    val callInterceptorIntentFilter = IntentFilter("android.intent.action.ANY_ACTION")
-//    registerReceiver(yourBR, callInterceptorIntentFilter)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-//        val delay = 3000
-//        alarmHandle(delay)
+        buttonContacts = findViewById(R.id.imageButton)
+        editButton = findViewById(R.id.imageButton2)
+        instructButton = findViewById(R.id.imageButton3)
+
+
+        instructButton?.setOnClickListener {
+            // build alert dialog
+            val dialogBuilder = AlertDialog.Builder(this)
+
+            // set message of alert dialog
+            dialogBuilder.setMessage("Go to the All Contacts tab in the lower left corner. Then, select the contact you \n" +
+                    "want to set reminders for. You will be prompted to edit the frequency of the reminder. \n" +
+                    "Save your preferences. You are done setting the reminder! \n" +
+                    "You can see the list of contacts you edited in the middle tab called Edited Contacts.")
+                .setCancelable(true)
+
+            // create dialog box
+            val alert = dialogBuilder.create()
+            // set title for alert dialog box
+            alert.setTitle("Welcome to CallYourMother! Here are the instructions: ")
+            // show alert dialog
+            alert.show()
+        }
+
         i = intent
         registerReceiver(broadcastReceiver, IntentFilter("broadCastName"));
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
 
 
         createNotificationChannel()
 
-        button2.setOnClickListener {
-            sendNotification(0)
-//            NotificationUtils().setNotification(delay.toLong(), this@MainActivity)
-        }
-        button.setOnClickListener {
-            val intent = Intent(this, Edit::class.java)
-            startActivity(intent)
-          //  finish()
+//        button2.setOnClickListener {
+//            sendNotification(5000)
+//        }
+        editButton?.setOnClickListener {
+//            val intent = Intent(this, Edit::class.java)
+//            startActivity(intent)
+//          //  finish()
+//
+//             i = getIntent()
+//             type = i!!.getStringExtra("reminder type")//text/call
+//             times = i!!.getStringExtra("number of times")
+//             freq = i!!.getStringExtra("frequency type")//day/week/month/year
+//            contactName = i!!.getStringExtra("name")
+//            contactNum = i!!.getStringExtra("phone")
+//            Log.i("TAG", type + " HERE "+ contactNum + " "+i)
 
-             i = getIntent()
-             type = i!!.getStringExtra("reminder type")//text/call
-             times = i!!.getStringExtra("number of times")
-             freq = i!!.getStringExtra("frequency type")//day/week/month/year
-            contactName = i!!.getStringExtra("name")
-            contactNum = i!!.getStringExtra("phone")
-            Log.i("TAG", type + " HERE "+ contactNum + " "+i)
+            sendNotification(5000)
+        //in the actual app, this number would be the time in future they would like to set the notification for (in milliseconds)
+
 
         }
 
@@ -182,14 +198,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(dataMain)
                 //finish()
 
-
-                /*i = getIntent()
-                type = i!!.getStringExtra("reminder type")//text/call
-                times = i!!.getStringExtra("number of times")
-                freq = i!!.getStringExtra("frequency type")//day/week/month/year
-                contactName = i!!.getStringExtra("name")
-                contactNum = i!!.getStringExtra("phone")*/
-
                // val intent:Intent = getIntent()
                 Log.i("TAG", "IS NULLER"+i?.extras)
 
@@ -199,11 +207,16 @@ class MainActivity : AppCompatActivity() {
                     Log.i("TAG", type + " HeeeeeeeERE "+ contactNum )
 
                     //Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
-                    determineDelay()
+                 //   Handler().postDelayed({
+
+//                    determineDelay()
+                  //  }, 25000)
+
+
                 } else {
                     Log.i("TAG", "IS NULL")
 
-                    Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
                 }
 
 
@@ -245,10 +258,10 @@ class MainActivity : AppCompatActivity() {
                         val bundle :Bundle ?=dataIntent.extras
                        if (bundle!=null){
                             //     val message = bundle.getString("object") // 1
-                            Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
-                            determineDelay()
+                          //  Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
+//                            determineDelay()
                         } else {
-                            Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
+                           // Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
                         }
                     }
                 return false
@@ -263,53 +276,55 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun determineDelay() {
-        Log.i("TAG", "HELOOOOOOOOOOOOO")
-        val day : Long = 86400000
-        val week : Long = day * 7
-        val month : Long = day * 30
-        val year : Long = week * 52
-
-        /*val i: Intent = intent //getIntent()
-        val type = i.getStringExtra("reminder type")//text/call
-        val times = i.getStringExtra("number of times")
-        val freq = i.getStringExtra("frequency type")//day/week/month/year
-        contactName = i.getStringExtra("name")*/
-
-       // val time = times?.toLong()
-        var  ret :Long  = 3000
-
-    /*    if (time != null) {
-            Log.i("TAG", time.toString())
-        }
-        if (type != null) {
-            Log.i("TAG", type)
-        }
-        if (freq != null) {
-            Log.i("TAG", freq)
-        }*/
-        if(freq === "day"){
-            if (times != null) {
-                ret =  day/ times!!.toLong()
-            }
-        } else if (freq == "week"){
-            if (times != null) {
-                ret = week/ times!!.toLong()
-            }
-        } else if (freq == "month"){
-            if (times != null) {
-                ret = month/ times!!.toLong()
-            }
-        } else {//year
-            if (times != null) {
-                ret =  year/ times!!.toLong()
-            }
-        }
-//        return freq/times
-
-        sendNotification(ret)
-
-    }
+//    fun determineDelay() {
+//        Log.i("TAG", "HELOOOOOOOOOOOOO")
+//        val day : Long = 86400000
+//        val week : Long = day * 7
+//        val month : Long = day * 30
+//        val year : Long = week * 52
+//
+//        val times = i?.getStringExtra("number of times")
+//
+//        /*val i: Intent = intent //getIntent()
+//        val type = i.getStringExtra("reminder type")//text/call
+//        val times = i.getStringExtra("number of times")
+//        val freq = i.getStringExtra("frequency type")//day/week/month/year
+//        contactName = i.getStringExtra("name")*/
+//
+//       // val time = times?.toLong()
+//        var  ret :Long  = 3000
+//
+//    /*    if (time != null) {
+//            Log.i("TAG", time.toString())
+//        }
+//        if (type != null) {
+//            Log.i("TAG", type)
+//        }
+//        if (freq != null) {
+//            Log.i("TAG", freq)
+//        }*/
+//        if(freq == "day"){
+//            if (times != null) {
+//                ret =  day/ times!!.toLong()
+//            }
+//        } else if (freq == "week"){
+//            if (times != null) {
+//                ret = week/ times!!.toLong()
+//            }
+//        } else if (freq == "month"){
+//            if (times != null) {
+//                ret = month/ times!!.toLong()
+//            }
+//        } else {//year
+//            if (times != null) {
+//                ret =  year/ times!!.toLong()
+//            }
+//        }
+////        return freq/times
+//
+//        sendNotification(ret)
+//
+//    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -367,8 +382,8 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getActivity(this, 0, landingIntent, 0)
 
 
-        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
+//        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
 
 
         val callnowIntent = Intent(this, Receiver::class.java).apply {
@@ -394,8 +409,8 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle("Call " + contactName)
-                .setContentText("help me :(")
+                .setContentTitle("Call $contactName!")
+                .setContentText("you really should, I bet they miss you")
                 .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
 //            .setAutoCancel(true)
 //            .setSound(defaultSoundUri)
