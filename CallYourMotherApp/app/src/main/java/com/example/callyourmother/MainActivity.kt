@@ -87,25 +87,10 @@ class MainActivity : AppCompatActivity() {
 
         createNotificationChannel()
 
-//        button2.setOnClickListener {
-//            sendNotification(5000)
-//        }
         editButton?.setOnClickListener {
-//            val intent = Intent(this, Edit::class.java)
-//            startActivity(intent)
-//          //  finish()
-//
-//             i = getIntent()
-//             type = i!!.getStringExtra("reminder type")//text/call
-//             times = i!!.getStringExtra("number of times")
-//             freq = i!!.getStringExtra("frequency type")//day/week/month/year
-//            contactName = i!!.getStringExtra("name")
-//            contactNum = i!!.getStringExtra("phone")
-//            Log.i("TAG", type + " HERE "+ contactNum + " "+i)
+
 
             sendNotification(5000)
-        //in the actual app, this number would be the time in future they would like to set the notification for (in milliseconds)
-
 
         }
 
@@ -146,21 +131,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             readContact()
         }
-        /*     if(requestCode == 112 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                     ActivityCompat.requestPermissions(this, Array(1) { Manifest.permission.CALL_PHONE }, 112)///
-                     Toast.makeText(applicationContext, "This permission is required for this app.", Toast.LENGTH_LONG).show()
-                 }
-             }*/
 
     }
 
 
-    /*fun phonecall() {
-        val intent = Intent(Intent.ACTION_CALL);
-        intent.data = Uri.parse("tel:"+ contactNum)
-        startActivity(intent)
-    }*/
 
     private fun readContact() {
         var from = listOf<String>(
@@ -168,7 +142,6 @@ class MainActivity : AppCompatActivity() {
             ContactsContract.CommonDataKinds.Phone.NUMBER
         ).toTypedArray()
 
-//            Log.i("tag", "ahh")
 
         var to = intArrayOf(android.R.id.text1, android.R.id.text2)
 
@@ -177,10 +150,7 @@ class MainActivity : AppCompatActivity() {
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
         )
-        //contactName = rs?.getString(0)
-        //contactNum = rs?.getString(1)
 
-//MASTER CONTACT LIST
         var adapter =
             SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
@@ -206,22 +176,13 @@ class MainActivity : AppCompatActivity() {
                     //     val message = bundle.getString("object") // 1
                     Log.i("TAG", type + " HeeeeeeeERE "+ contactNum )
 
-                    //Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
-                 //   Handler().postDelayed({
-
-//                    determineDelay()
-                  //  }, 25000)
-
 
                 } else {
                     Log.i("TAG", "IS NULL")
 
-                    //Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
                 }
 
 
-                // onActivityResult(8, RESULT_OK, )
-                //dataIntent.getStringExtra("name")?.let { Log.i("TAG", it) }
             }
 
 
@@ -257,11 +218,8 @@ class MainActivity : AppCompatActivity() {
 
                         val bundle :Bundle ?=dataIntent.extras
                        if (bundle!=null){
-                            //     val message = bundle.getString("object") // 1
-                          //  Toast.makeText(applicationContext, "pls work pls pls", Toast.LENGTH_SHORT).show()
-//                            determineDelay()
+
                         } else {
-                           // Toast.makeText(applicationContext, "CAN'T send", Toast.LENGTH_SHORT).show()
                         }
                     }
                 return false
@@ -276,55 +234,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-//    fun determineDelay() {
-//        Log.i("TAG", "HELOOOOOOOOOOOOO")
-//        val day : Long = 86400000
-//        val week : Long = day * 7
-//        val month : Long = day * 30
-//        val year : Long = week * 52
-//
-//        val times = i?.getStringExtra("number of times")
-//
-//        /*val i: Intent = intent //getIntent()
-//        val type = i.getStringExtra("reminder type")//text/call
-//        val times = i.getStringExtra("number of times")
-//        val freq = i.getStringExtra("frequency type")//day/week/month/year
-//        contactName = i.getStringExtra("name")*/
-//
-//       // val time = times?.toLong()
-//        var  ret :Long  = 3000
-//
-//    /*    if (time != null) {
-//            Log.i("TAG", time.toString())
-//        }
-//        if (type != null) {
-//            Log.i("TAG", type)
-//        }
-//        if (freq != null) {
-//            Log.i("TAG", freq)
-//        }*/
-//        if(freq == "day"){
-//            if (times != null) {
-//                ret =  day/ times!!.toLong()
-//            }
-//        } else if (freq == "week"){
-//            if (times != null) {
-//                ret = week/ times!!.toLong()
-//            }
-//        } else if (freq == "month"){
-//            if (times != null) {
-//                ret = month/ times!!.toLong()
-//            }
-//        } else {//year
-//            if (times != null) {
-//                ret =  year/ times!!.toLong()
-//            }
-//        }
-////        return freq/times
-//
-//        sendNotification(ret)
-//
-//    }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -412,8 +322,7 @@ class MainActivity : AppCompatActivity() {
                 .setContentTitle("Call $contactName!")
                 .setContentText("you really should, I bet they miss you")
                 .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
-//            .setAutoCancel(true)
-//            .setSound(defaultSoundUri)
+
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_launcher_foreground, "Call Now", callnowPendingIntent)
                 .addAction(
@@ -429,17 +338,11 @@ class MainActivity : AppCompatActivity() {
                 .setAutoCancel(true)
 
 
-//        Timer().schedule(2000){
-//
-//        }
-
             with(NotificationManagerCompat.from(this)) {
                 notify(notificationId, notificationBuilder.build())
             }
 
 
-//    Handler().postDelayed({
-//        //doSomethingHere()
         }, del)
 
 
@@ -463,14 +366,11 @@ class MainActivity : AppCompatActivity() {
 
                 phonecall()
 
-//                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                notificationManager.cancel(MainActivity().notificationId)
             }
             if (id == "later") {
                 Log.i("tag", "clicked snooze");
                 Toast.makeText(context, "Reminder Snoozed", length).show()//
 
-//                time = (System.currentTimeMillis() + 7200000)
                 val d: Long = 2000
                 Log.i("tag", d.toString())
 
@@ -482,7 +382,6 @@ class MainActivity : AppCompatActivity() {
                 Log.i("tag", "clicked tomorrow");
                 Toast.makeText(context, "Snoozed for 24 hours.", length).show()//
 
-//                time = (System.currentTimeMillis() + 86400000)
                 sendNotification(86400000)
 
             }

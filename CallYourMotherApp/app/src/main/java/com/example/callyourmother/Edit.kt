@@ -101,7 +101,6 @@ class Edit : AppCompatActivity() {
 
 
             startActivity(dataIntent)
-            //finish()
 
 
         }
