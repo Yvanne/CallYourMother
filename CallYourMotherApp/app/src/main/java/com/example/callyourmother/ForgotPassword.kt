@@ -37,6 +37,7 @@ class ForgotPassword : AppCompatActivity() {
     private fun resetPassword() {
         var email: String = editEmail!!.text.toString().trim()
 
+        // Check if  EMAIL is empty
         if (email.isEmpty()) {
             editEmail!!.setError("Email required!")
             editEmail!!.requestFocus()
@@ -44,7 +45,7 @@ class ForgotPassword : AppCompatActivity() {
         }
 
         // VALIDATE EMAIL
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editEmail!!.setError(("Please enter a valid email address"))
             editEmail!!.requestFocus()
             return
@@ -52,16 +53,24 @@ class ForgotPassword : AppCompatActivity() {
 
         progressBar!!.visibility = View.VISIBLE
 
+        // sends link to email to reset password
         mAuth!!.sendPasswordResetEmail(email)
             .addOnCompleteListener(OnCompleteListener<Void>() { task ->
-            if (task.isSuccessful) {
-                progressBar!!.visibility = View.GONE
-                Toast.makeText(applicationContext, "Check your email to reset your password", Toast.LENGTH_LONG).show()
-            }
-            else{
-                progressBar!!.visibility = View.GONE
-                Toast.makeText(applicationContext, "uh-oh something went wrong. Try again", Toast.LENGTH_LONG).show()
-            }
+                if (task.isSuccessful) {
+                    progressBar!!.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext,
+                        "Check your email to reset your password",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    progressBar!!.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext,
+                        "uh-oh something went wrong. Try again",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
             })
 

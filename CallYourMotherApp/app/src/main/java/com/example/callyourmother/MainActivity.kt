@@ -25,9 +25,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
-//yes
 class MainActivity : AppCompatActivity() {
-    //test!!!!
+    //organize the retreival of contacts
     var cols = listOf<String>(
         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
         ContactsContract.CommonDataKinds.Phone.NUMBER,
@@ -35,20 +34,18 @@ class MainActivity : AppCompatActivity() {
     ).toTypedArray()
 
     private val CHANNEL_ID = "channel_id"
-    public var notificationId = 101
-    public var contactName = "Amanda Melvin"
-    public var contactNum = "2403160806"
-    val delay: Long = 1000 //in milliseconds
-     var i:Intent? = null
-     var  type: String? = null
-    var times : String? = null
-    var freq : String? = null
+    var notificationId = 101
+    var contactName: String? = null
+    var contactNum: String? = null
+    var i: Intent? = null
+    var type: String? = null
+    var times: String? = null
+    var freq: String? = null
 
+    // image buttons
     private var buttonContacts: ImageButton? = null
     private var editButton: ImageButton? = null
-    private  var instructButton: ImageButton? = null
-
-
+    private var instructButton: ImageButton? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,16 +57,18 @@ class MainActivity : AppCompatActivity() {
         editButton = findViewById(R.id.imageButton2)
         instructButton = findViewById(R.id.imageButton3)
 
-
+        // displays user instructions for the app
         instructButton?.setOnClickListener {
             // build alert dialog
             val dialogBuilder = AlertDialog.Builder(this)
 
             // set message of alert dialog
-            dialogBuilder.setMessage("Go to the All Contacts tab in the lower left corner. Then, select the contact you \n" +
-                    "want to set reminders for. You will be prompted to edit the frequency of the reminder. \n" +
-                    "Save your preferences. You are done setting the reminder! \n" +
-                    "You can see the list of contacts you edited in the middle tab called Edited Contacts.")
+            dialogBuilder.setMessage(
+                "Go to the All Contacts tab in the lower left corner. Then, select the contact you \n" +
+                        "want to set reminders for. You will be prompted to edit the frequency of the reminder. \n" +
+                        "Save your preferences. You are done setting the reminder! \n" +
+                        "You can see the list of contacts you edited in the middle tab called Edited Contacts."
+            )
                 .setCancelable(true)
 
             // create dialog box
@@ -80,21 +79,32 @@ class MainActivity : AppCompatActivity() {
             alert.show()
         }
 
+        // gets values passed by edit activity
         i = intent
+        type = i!!.getStringExtra("reminder type")//text/call
+        times = i!!.getStringExtra("number of times")
+        freq = i!!.getStringExtra("frequency type")//day/week/month/year
+        contactName = i!!.getStringExtra("name")
+        contactNum = i!!.getStringExtra("phone");
+
+        if (i != null) {
+            /*only call this function if the intent has been received from Edit and all the fields
+              are popuated and not null */
+            determineDelay(type, times, freq)
+        } else {
+            //do nothing when null
+            Log.i("TESTTAG", "data sent null")
+        }
         registerReceiver(broadcastReceiver, IntentFilter("broadCastName"));
-
-
-
         createNotificationChannel()
 
         editButton?.setOnClickListener {
-
-
             sendNotification(5000)
 
         }
 
-        //ask for permission multiple times
+        //ask user for permission to access phone contacts multiple times
+        //if permission is accepted then call the readContact() function
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_CONTACTS
@@ -108,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             readContact()
         }
-
+// ask the user permission to call the contact from the app
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CALL_PHONE
@@ -118,10 +128,10 @@ class MainActivity : AppCompatActivity() {
                 this,
                 Array(1) { Manifest.permission.CALL_PHONE },
                 112
-            )///
+            )
         }
     }
-
+//check again to see if the user granted the correct permission for contact reading
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -134,15 +144,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
+//private function to read through the user's contact name and number
     private fun readContact() {
+    //retreive the list of names and numbers and store into the from array
         var from = listOf<String>(
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER
         ).toTypedArray()
 
-
+        //store the name and number from the phone
         var to = intArrayOf(android.R.id.text1, android.R.id.text2)
 
         //sort based on name
@@ -151,10 +161,13 @@ class MainActivity : AppCompatActivity() {
             cols, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
         )
 
+    //connect the contacts and numbers with adapter and display in listview in alphabetical order
         var adapter =
             SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, rs, from, to, 0)
 //            val listView : ListView = findViewById(R.id.listView)
         listView.adapter = adapter
+
+    //make each contact clickable so that user can edit the contact for frequency
         listView.onItemClickListener =
             AdapterView.OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
                 Toast.makeText(
@@ -162,37 +175,22 @@ class MainActivity : AppCompatActivity() {
                     "Editing reminder frequency for: " + rs?.getString(0),
                     Toast.LENGTH_LONG
                 ).show()
+                /*launch the Edit class and send the specific name and number of selected contact along*/
                 var dataMain: Intent = Intent(this, Edit::class.java)
                 dataMain.putExtra("name", rs?.getString(0))
-                dataMain.putExtra("phone",rs?.getString(1) )
+                dataMain.putExtra("phone", rs?.getString(1))
                 startActivity(dataMain)
-                //finish()
-
-               // val intent:Intent = getIntent()
-                Log.i("TAG", "IS NULLER"+i?.extras)
-
-                val bundle :Bundle ?= i?.extras
-                if (bundle!=null){
-                    //     val message = bundle.getString("object") // 1
-                    Log.i("TAG", type + " HeeeeeeeERE "+ contactNum )
-
-
-                } else {
-                    Log.i("TAG", "IS NULL")
-
-                }
-
+                finish()
 
             }
 
 
-
-            // SEARCHING FOR CONTACTS
+        // SEARCHING FOR CONTACTS
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
             }
-
+            //search the list of contacts and match the string based on user input
             override fun onQueryTextChange(p0: String?): Boolean {
                 var rs = contentResolver.query(
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -202,6 +200,7 @@ class MainActivity : AppCompatActivity() {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                 )
                 adapter.changeCursor(rs)
+                //make each contact clickable after search
                 listView.onItemClickListener =
                     AdapterView.OnItemClickListener { parent: AdapterView<*>, view: View?, position, id -> // Item position is in the variable position.
                         Toast.makeText(
@@ -209,18 +208,12 @@ class MainActivity : AppCompatActivity() {
                             "Editing reminder frequency for: " + rs?.getString(0),
                             Toast.LENGTH_LONG
                         ).show()
-
+                        /*launch the Edit class and send the specific name and number of selected contact along*/
                         var dataIntent: Intent = Intent(this@MainActivity, Edit::class.java)
                         dataIntent.putExtra("name", rs?.getString(0))
-                        dataIntent.putExtra("phone",rs?.getString(1) )
+                        dataIntent.putExtra("phone", rs?.getString(1))
                         startActivity(dataIntent)
                         finish()
-
-                        val bundle :Bundle ?=dataIntent.extras
-                       if (bundle!=null){
-
-                        } else {
-                        }
                     }
                 return false
             }
@@ -228,13 +221,56 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /*place a phonecall to the selected contacct*/
     fun phonecall() {
         val intent = Intent(Intent.ACTION_CALL);
         intent.data = Uri.parse("tel:$contactNum")
         startActivity(intent)
     }
 
+    // Calculates how often the notification will be sent
+    fun determineDelay(type1: String?, times1: String?, freq1: String?) {
+        Log.i("TAG", "entered determineDelay")
+        val day: Long = 86400000
+        val week: Long = day * 7
+        val month: Long = day * 30
+        val year: Long = week * 52
 
+
+        Log.i("TAG", "IS exras: " + i?.extras)
+
+        if (times1 != null) {
+            Log.i("TAG", times.toString())
+        }
+        if (type1 != null) {
+            Log.i("TAG", type.toString())
+        }
+        if (freq1 != null) {
+            Log.i("TAG", "frequency: " + freq.toString())
+        }
+        if (freq1 == "daily") {
+            if (times1 != null) {
+                val ret = day / times1!!.toLong()
+                sendNotification(ret)
+            }
+        } else if (freq1 == "weekly") {
+            if (times1 != null) {
+                val ret = week / times1!!.toLong()
+                sendNotification(ret)
+            }
+        } else if (freq1 == "monthly") {
+            if (times1 != null) {
+                val ret = month / times1!!.toLong()
+                sendNotification(ret)
+            }
+        } else {//year
+            if (times1 != null) {
+                val ret = year / times1!!.toLong()
+                sendNotification(ret)
+            }
+        }
+
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -248,7 +284,6 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
             R.id.logout -> {
                 FirebaseAuth.getInstance().signOut()
                 Toast.makeText(applicationContext, "Logged out", Toast.LENGTH_SHORT).show()
@@ -282,25 +317,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+//function that builds and sends the notification
     fun sendNotification(del: Long) {
 
-
+        //opens notification selection based off of the user selection
         val landingIntent = Intent(this, Receiver::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, landingIntent, 0)
 
-
-//        val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent)
-
-
         val callnowIntent = Intent(this, Receiver::class.java).apply {
             identifier = "now"
-//            action = Intent.ACTION_CALL
         }
-//        callnowIntent.identifier = "now"
         val callnowPendingIntent: PendingIntent =
             PendingIntent.getBroadcast(this, 0, callnowIntent, 0)
 
@@ -319,8 +347,8 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle("Call $contactName!")
-                .setContentText("you really should, I bet they miss you")
+                .setContentTitle("Hey! you should give $contactName a $type!")
+                .setContentText("You set up a reminder to $type them $freq.")
                 .setColor(ContextCompat.getColor(this, R.color.notificationBlue))
 
                 .setContentIntent(pendingIntent)
@@ -348,15 +376,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    /*aligns with Receiver.kt to react to notification action buttons; is located in this class so as
+    * to allow visibility of functions called*/
     var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val b = intent.extras
             val message = b!!.getString("message")
             Log.i("tag", "" + message)
 
-
-//            val id = intent.extras
             val id = intent.extras!!.getString("identifier")
 
             val length = Toast.LENGTH_SHORT

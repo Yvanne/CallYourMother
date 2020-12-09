@@ -44,7 +44,7 @@ class Registration : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v != null) {
-            when(v.id) {
+            when (v.id) {
                 // when you click on title , you're taken back to the login activity
                 R.id.bannerReg -> startActivity(Intent(this, Login::class.java))
                 R.id.regButton -> registerUser()
@@ -53,60 +53,74 @@ class Registration : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    // method that registers user and saves info in firebase database
     private fun registerUser() {
-        var textEmail:String = email!!.text.toString().trim()
-        var textName:String = username!!.text.toString().trim()
-        var textPassword:String = password!!.text.toString().trim()
+        var textEmail: String = email!!.text.toString().trim()
+        var textName: String = username!!.text.toString().trim()
+        var textPassword: String = password!!.text.toString().trim()
 
+        // verify provided name
         if (textName.isEmpty()) {
             username!!.setError("Name required!")
             username!!.requestFocus()
             return
         }
 
+        // VALIDATE EMAIL
         if (textEmail.isEmpty()) {
             email!!.setError("Email required!")
             email!!.requestFocus()
             return
         }
-        // VALIDATE EMAIL
-        if(!EMAIL_ADDRESS.matcher(textEmail).matches()) {
+        if (!EMAIL_ADDRESS.matcher(textEmail).matches()) {
             email!!.setError(("Please enter a valid email address"))
             email!!.requestFocus()
             return
         }
-
+        // VALIDATE PASSWORD
         if (textPassword.isEmpty()) {
             password!!.setError("Password required!")
             password!!.requestFocus()
             return
         }
-        if(textPassword.length < 6) {
+        if (textPassword.length < 6) {
             password!!.setError("Your password should be 6 or more letters long")
             password!!.requestFocus()
             return
         }
-
+        // saves provided info into firebase depending on sucess of information entered
         progressBar!!.visibility = View.VISIBLE
         mAuth!!.createUserWithEmailAndPassword(textEmail, textPassword)
             .addOnCompleteListener(OnCompleteListener<AuthResult>() { task ->
                 if (task.isSuccessful) {
-                    var user: User = User(textName,textEmail)
+                    var user: User = User(textName, textEmail)
                     FirebaseDatabase.getInstance().getReference("Users")
                         .child(FirebaseAuth.getInstance().currentUser!!.uid)
-                        .setValue(user).addOnCompleteListener( OnCompleteListener<Void> { task ->
+                        .setValue(user).addOnCompleteListener(OnCompleteListener<Void> { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(applicationContext, "New user registration successful!", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "New user registration successful!",
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 progressBar!!.visibility = View.GONE
 
                             } else {
                                 //display a failure message
-                                Toast.makeText(applicationContext, "user registration unsuccessful!", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "user registration unsuccessful!",
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 progressBar!!.visibility = View.GONE
                             }
                         })
                 } else {
-                    Toast.makeText(applicationContext, "Registration failed! Please try again later", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Registration failed! Please try again later",
+                        Toast.LENGTH_LONG
+                    ).show()
                     progressBar!!.visibility = View.GONE
                 }
             })

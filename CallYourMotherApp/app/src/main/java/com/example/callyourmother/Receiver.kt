@@ -16,31 +16,29 @@ class Receiver  : BroadcastReceiver() {
         Log.i("tag", "entered onReceive")
 
 
-        val extras = intent.extras
-        val i = Intent("broadCastName")
-        // Data you need to pass to activity class
-        i.putExtra("message", "beeeeeeeeeeeeeeeeeeeeeep")
-
         val int = Intent("broadCastName")
         val st = intent.identifier.toString()
         int.putExtra("identifier", st)
         context.sendBroadcast(int)
 
-
+        /*the identifier is how the Broadcast Receiver can identify which notification action the user selects,
+        between 'Call Now' 'Snooze for 2 hours' and 'Call Tomorrow' */
         if(intent.identifier == "now"){
 
-
+            //dismisses notification upon selection
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(MainActivity().notificationId)
         }
         if(intent.identifier == "later"){
 
+            //dismisses notification upon selection
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(MainActivity().notificationId)
         }
 
         if(intent.identifier == "tomorrow"){
 
+            //dismisses notification upon selection
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(MainActivity().notificationId)
         }

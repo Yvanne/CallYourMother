@@ -16,7 +16,6 @@ class UserInfo : AppCompatActivity() {
     private lateinit var userID: String
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
@@ -28,25 +27,30 @@ class UserInfo : AppCompatActivity() {
 
         userID = user!!.uid
 
-        val name:TextView = findViewById(R.id.accName)
-        val email:TextView = findViewById(R.id.accEmail)
+        val name: TextView = findViewById(R.id.accName)
+        val email: TextView = findViewById(R.id.accEmail)
+        // displays user information saved in firebase
+        mDatabaseReference!!.child(userID!!)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var userProfile: User? = dataSnapshot.getValue(User::class.java)
+                    if (userProfile != null) {
+                        var fullName = userProfile.textName
+                        var fullEmail = userProfile.textEmail
 
-        mDatabaseReference!!.child(userID!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var userProfile: User? = dataSnapshot.getValue(User::class.java)
-                if (userProfile != null) {
-                    var fullName = userProfile.textName
-                    var fullEmail = userProfile.textEmail
-
-                    name!!.setText(fullName)
-                    email!!.setText(fullEmail)
+                        name!!.setText(fullName)
+                        email!!.setText(fullEmail)
+                    }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(applicationContext, "Ooops! Something went wrong", Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Ooops! Something went wrong",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
 
     }
 }

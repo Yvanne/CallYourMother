@@ -14,10 +14,9 @@ import com.google.firebase.database.FirebaseDatabase
 class Edit : AppCompatActivity() {
     private lateinit var name: TextView
     private lateinit var numTimes: EditText
-    private  var reminderType: String? = null
-    private var str:String? = null
+    private var reminderType: String? = null
+    private var str: String? = null
     private lateinit var saveButton: Button
-    private lateinit var selectedRadioButton: RadioGroup
     private lateinit var dayRadio: RadioButton
     private lateinit var weekRadio: RadioButton
     private lateinit var monthRadio: RadioButton
@@ -25,8 +24,6 @@ class Edit : AppCompatActivity() {
     private lateinit var textChecked: CheckBox
     private lateinit var callChecked: CheckBox
     private lateinit var ref: DatabaseReference
-    private val names: MutableList<String> = mutableListOf()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,22 +45,19 @@ class Edit : AppCompatActivity() {
         ref = FirebaseDatabase.getInstance().reference.child("Contacts");
 
 
-
         // TODO: get the contact's name from mainActivity
-        // probably through an intent
         val i: Intent = intent //getIntent()
-        val type= i.getStringExtra("name")
+        val type = i.getStringExtra("name")
         val phone = i.getStringExtra("phone")
         name.setText(type)
 
 
-
         // Are we editing calls, texts or boths
-        if(callChecked.isChecked && textChecked.isChecked)
-            reminderType = "both"
-        else if(callChecked.isChecked)
+        if (callChecked.isChecked && textChecked.isChecked)
+            reminderType = "call and text"
+        else if (callChecked.isChecked)
             reminderType = "call"
-        else if(textChecked.isChecked)
+        else if (textChecked.isChecked)
             reminderType = "text"
 
 
@@ -71,64 +65,60 @@ class Edit : AppCompatActivity() {
         saveButton.setOnClickListener {
 
             //Error if user enters wrong settings
-            if (reminderType.isNullOrEmpty() ||  numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
-                Toast.makeText(applicationContext, "Please enter correct settings", Toast.LENGTH_LONG).show()
+            if (reminderType.isNullOrEmpty() || numTimes.text.toString() == "" || numTimes.text.toString() == "0" || str.isNullOrEmpty()) {
+                Toast.makeText(
+                    applicationContext,
+                    "Please enter correct settings",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                // TODO - gather ToDoItem data
+                Toast.makeText(
+                    applicationContext,
+                    reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for " + type,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                // SAVING USER SETTING INFO TO FIREBASE
+                contact.name = type
+                contact.setting =
+                    reminderType + " reminders set " + numTimes.text.toString() + " times " + str
+                ref.push().setValue(contact)
+
+                // TODO - return data Intent to main activity where this will also be sent to notification data
+                var dataIntent: Intent = Intent(this@Edit, MainActivity::class.java).apply {
+                    putExtra("reminder type", reminderType)
+                    putExtra("number of times", numTimes.text.toString())
+                    putExtra("frequency type", str.toString())
+                    putExtra("name", type.toString())
+                    putExtra("phone", phone.toString())
+                    startActivity(this)
+                }
             }
-            else {
-            // TODO - gather ToDoItem data
-            Toast.makeText(
-                applicationContext,
-                reminderType + " reminders set " + numTimes.text.toString() + " times " + str + " for " + type,
-                Toast.LENGTH_LONG
-            ).show()
-
-                names.add(name.toString())
-            // SAVING USER SETTING INFO TO FIREBASE
-            contact.name = type
-            contact.setting =
-                reminderType + " reminders set " + numTimes.text.toString() + " times " + str
-            ref.push().setValue(contact)
-            Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
-
-            // TODO - return data Intent to main activity where this will also be sent to notification data
-            var dataIntent: Intent = Intent(this@Edit, MainActivity::class.java)
-            dataIntent.putExtra("reminder type", reminderType.toString())
-            dataIntent.putExtra("number of times", numTimes.toString())
-            dataIntent.putExtra("frequency type", str.toString())
-            dataIntent.putExtra("name", name.toString())
-            dataIntent.putExtra("phone", phone)
-
-
-
-            startActivity(dataIntent)
-
-
-        }
         }
 
 
     }
 
-
+    // get which box was selected text, call or both
     fun onCheckBoxClicked(view: View) {
-        if(callChecked.isChecked && textChecked.isChecked)
-            reminderType = "both"
-        else if(callChecked.isChecked)
+        if (callChecked.isChecked && textChecked.isChecked)
+            reminderType = "call and text"
+        else if (callChecked.isChecked)
             reminderType = "call"
-        else if(textChecked.isChecked)
+        else if (textChecked.isChecked)
             reminderType = "text"
     }
 
     // Get how often to be reminded such as by days, weeks, months or years
     fun onRadioButtonClicked(view: View) {
         if (dayRadio.isChecked)
-            str = "Daily"
-        else if(weekRadio.isChecked)
-            str = "Weekly"
+            str = "daily"
+        else if (weekRadio.isChecked)
+            str = "weekly"
         else if (monthRadio.isChecked)
-            str = "Monthly"
+            str = "monthly"
         else
-            str = "Yearly"
-
+            str = "yearly"
     }
 }
